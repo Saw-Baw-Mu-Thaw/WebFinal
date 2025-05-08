@@ -30,7 +30,9 @@ function get_notes($userid)
 {
     $conn = get_conn();
 
-    $query = "select * from Notes where UserID = ? or NoteId in (select NoteID from SharedNotes where Collaborator = ?)";
+    $query = "select * from Notes 
+              where UserID = ? or NoteId in (select NoteID from SharedNotes where Collaborator = ?) 
+              Order By Pinned DESC, PinnedTime DESC, ModifiedDate DESC";
     $statement = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($statement, 'ii', $userid, $userid);
     mysqli_stmt_execute($statement);
@@ -207,7 +209,8 @@ function get_note_pwd($noteId)
     return $res['Password'];
 }
 
-function get_note_title($noteId){
+function get_note_title($noteId)
+{
     $conn = get_conn();
     $query = "Select Title from Notes Where NoteID = ?";
     $stmt = mysqli_prepare($conn, $query);
@@ -215,4 +218,32 @@ function get_note_title($noteId){
     mysqli_execute($stmt);
     $res = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
     return $res['Title'];
+}
+
+function pin_note($noteId, $userId)
+{
+    $conn = get_conn();
+
+    $query = "Update Notes 
+                Set Pinned = 1, PinnedTime = NOW()
+                Where UserID = ? AND NoteID = ?";
+
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'ii', $userId, $noteId);
+    $res = mysqli_execute($stmt);
+    return $res;
+}
+
+function unpin_note($noteId, $userId)
+{
+    $conn = get_conn();
+
+    $query = "Update Notes 
+                Set Pinned = 0, PinnedTime = NULL
+                Where UserID = ? AND NoteID = ?";
+
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'ii', $userId, $noteId);
+    $res = mysqli_execute($stmt);
+    return $res;
 }

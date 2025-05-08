@@ -23,7 +23,8 @@ foreach ($rows as $note) {
         'UserID' => $note['UserID'],
         'Locked' => $locked,
         "LastModified" => $note['ModifiedDate'],
-        "AttachedImg" => $note['AttachedImg']
+        "AttachedImg" => $note['AttachedImg'],
+        "Pinned" => (bool)$note['Pinned'],
     );
     array_push($array, $temp);
 }

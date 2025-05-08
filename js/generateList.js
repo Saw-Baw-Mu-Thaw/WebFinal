@@ -5,7 +5,7 @@ function generateList(response) {
     var table = $("<table class='table col-12'></table>")
     var thead = $("<thead></thead>")
     var headRow = $("<tr></tr>")
-    $(headRow).append("<th>Index</th>", "<th>Title</th>", "<th>Last Modified</th>", "<th>Actions<th>");
+    $(headRow).append("<th>Index</th>", "<th>Title</th>", "<th>Last Modified</th>", "<th>Actions</th>", "<th>Pin</th>");
     $(thead).append(headRow)
     $(table).append(thead)
 
@@ -27,8 +27,21 @@ function generateList(response) {
             lockBtn = $(`<button class='btn btn-info mx-1' onclick='removeLock(${obj['NoteID']})'>Remove Lock</button>`)
         }
 
+        var pinCell = $("<td></td>");
+        var pinBtn;
+        if (obj['Pinned'] == true) {
+            pinBtn = $(`<button class='btn btn-primary' onclick='removePin(${obj['NoteID']})'>
+                <span style='color:red;'><i class="fas fa-thumbtack"></i></span>
+                </button>`)
+        } else {
+            pinBtn = $(`<button class='btn btn-primary' onclick='addPin(${obj['NoteID']})'>
+                <span style='color:blue;'><i class="fas fa-thumbtack"></i></span>
+                </button>`)
+        }
+        $(pinCell).append(pinBtn);
+
         $(actionCell).append(openBtn, delBtn, lockBtn);
-        $(trow).append(index, title, lastModified, actionCell);
+        $(trow).append(index, title, lastModified, actionCell, pinCell);
         $(tbody).append(trow);
     }
 
