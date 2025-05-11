@@ -131,6 +131,41 @@ if (!isset($_SESSION['username'])) {
                         </div>
                     </div>
                 </div>
+
+                <!-- sharing modal -->
+                <div class="modal fade" id='sharingModal' tabindex=-1>
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Manage Sharing</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="shareEmail">Share with (Email)</label>
+                                    <input type="email" class="form-control" id="shareEmail" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="shareRole">Permission</label>
+                                    <select class="form-control" id="shareRole">
+                                        <option value="VIEWER">View Only</option>
+                                        <option value="EDITOR">Can Edit</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="updateSharing()">Share</button>
+                                
+                                <hr>
+                                <h6>Current Sharing</h6>
+                                <div id="sharingList" class="list-group">
+                                    <!-- Sharing list will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

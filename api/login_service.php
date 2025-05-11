@@ -27,14 +27,20 @@ if (empty($input->username) || empty($input->password)) {
 
 $username = $input->username;
 $password = $input->password;
+
+// Debug information
+error_log("Login attempt - Username: " . $username);
+
 $val = authenticate($username, $password);
 $res = $val[0];
 
 if ($res) {
     $_SESSION['username'] = $username;
     $_SESSION['userId'] = $val[1];
+    error_log("Login successful for user: " . $username);
     header(http_response_code(200));
     echo json_encode(array('code' => 0));
 } else {
+    error_log("Login failed for user: " . $username);
     echo json_encode(array('code' => 5, 'message' => 'Incorrect Username or Password'));
 }

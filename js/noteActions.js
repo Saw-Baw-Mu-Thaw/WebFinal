@@ -172,3 +172,89 @@ function showError(msg) {
 
     window.setTimeout(function () { $("#errorDiv").hide() }, 2500)
 }
+
+function showSharing(noteId) {
+    // Store the current note ID
+    window.currentNoteId = noteId;
+    
+    // Clear previous sharing list
+    $("#sharingList").empty();
+    
+    // Get current sharing information
+    $.ajax({
+        url: 'api/get_note_sharing.php?noteId=' + noteId,
+        type: 'GET',
+        dataType: 'json'
+    }).done(function(response) {
+        if (response.code === 0) {
+            // Populate sharing list
+            response.sharing_info.forEach(function(share) {
+                var item = $('<div class="list-group-item d-flex justify-content-between align-items-center"></div>');
+                var info = $('<span></span>').text(share.email + ' (' + share.role + ')');
+                var removeBtn = $('<button class="btn btn-danger btn-sm">Remove</button>')
+                    .click(function() {
+                        removeSharing(share.email);
+                    });
+                item.append(info, removeBtn);
+                $("#sharingList").append(item);
+            });
+        } else {
+            showError(response.message);
+        }
+    }).fail(function() {
+        showError('Failed to load sharing information');
+    });
+    
+    // Show the modal
+    $("#sharingModal").modal('show');
+}
+
+function updateSharing() {
+    var email = $("#shareEmail").val();
+    var role = $("#shareRole").val();
+    
+    if (!email) {
+        showError('Please enter an email address');
+        return;
+    }
+    
+    $.ajax({
+        url: 'api/update_sharing.php',
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            noteId: window.currentNoteId,
+            email: email,
+            role: role
+        })
+    }).done(function(response) {
+        if (response.code === 0) {
+            // Refresh sharing list
+            showSharing(window.currentNoteId);
+            // Clear input
+            $("#shareEmail").val('');
+        } else {
+            showError(response.message);
+        }
+    }).fail(function() {
+        showError('Failed to update sharing permissions');
+    });
+}
+
+function removeSharing(email) {
+    $.ajax({
+        url: 'api/remove_sharing.php?noteId=' + window.currentNoteId + '&email=' + encodeURIComponent(email),
+        type: 'DELETE',
+        dataType: 'json'
+    }).done(function(response) {
+        if (response.code === 0) {
+            // Refresh sharing list
+            showSharing(window.currentNoteId);
+        } else {
+            showError(response.message);
+        }
+    }).fail(function() {
+        showError('Failed to remove sharing permissions');
+    });
+}

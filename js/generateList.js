@@ -26,8 +26,9 @@ function generateList(response) {
         } else {
             lockBtn = $(`<button class='btn btn-info mx-1' onclick='removeLock(${obj['NoteID']})'>Remove Lock</button>`)
         }
+        var shareBtn = $(`<button class='btn btn-success mx-1' onclick='showSharing(${obj['NoteID']})'>Share</button>`);
 
-        $(actionCell).append(openBtn, delBtn, lockBtn);
+        $(actionCell).append(openBtn, delBtn, lockBtn, shareBtn);
         $(trow).append(index, title, lastModified, actionCell);
         $(tbody).append(trow);
     }

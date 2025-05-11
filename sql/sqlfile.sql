@@ -1,14 +1,18 @@
+
+USE noteDB;
+
+
 CREATE TABLE Users(
     UserID INT PRIMARY KEY AUTO_INCREMENT,
     Username VARCHAR (50) UNIQUE,
     Email VARCHAR (50) NOT NULL,
     Password VARCHAR (60) NOT NULL,
     Verified INT DEFAULT 0,
-    ProfilePic VARCHAR (50) NULL,
+    ProfilePic VARCHAR (50) NULL
     );
     
     -- bawbawbaw : passWord123&
-    --- Iroh : iroH232*
+    -- - Iroh : iroH232*
 INSERT INTO Users VALUES
 (1, 'bawbawbaw', 'bawbawbaw@gmail.com', '$2y$10$FAhpER8u.lR3UyELGxrB2u.jlgrMzaHUTi/8qizJilCjESjM6BpbC', 1, NULL),
 (2, 'Iroh', 'Iroh@gmail.com', '$2y$10$gJMe4PWhOAkRlYHejs0hausuEPdL38HbRSDarq4z6NdC25U9Vo.vq', 0, NULL);

@@ -17,6 +17,7 @@ function generateGrid(obj) {
         // console.log('set unlock btn')
         lockBtn = $(`<button class='btn btn-info mx-1' onclick='removeLock(${obj['NoteID']})'>Remove Lock</button>`)
     }
+    var shareBtn = $(`<button class='btn btn-success mx-1' onclick='showSharing(${obj['NoteID']})'>Share</button>`);
 
     if (obj['AttachedImg'] != null) {
         var attachedImg = $(`<img class='card-img-top' src='${obj['AttachedImg']}' />`)
@@ -28,7 +29,7 @@ function generateGrid(obj) {
     }
 
 
-    $(cardBody).append(cardTitle, cardText, openBtn, delBtn, lockBtn);
+    $(cardBody).append(cardTitle, cardText, openBtn, delBtn, lockBtn, shareBtn);
     $(card).append(cardBody);
     $("#mainContent").append(card);
 
