@@ -42,35 +42,6 @@ if (!isset($_SESSION['username'])) {
                 <div class="col-4 text-center" id="statusDiv">
 
                 </div>
-
-                <div class="d-flex justify-content-end col-4">
-                    <button class="btn btn-info" type='button' data-toggle='collapse' data-target='#ShareCollapse'>Share</button>
-                </div>
-            </div>
-
-            <div class="row p-3">
-                <div class="collapse col-lg-6 ml-auto col-12" id='ShareCollapse'>
-                    <div class="text-center">
-                        <h4>Share Notes</h4>
-                    </div>
-
-                    <form>
-                        <label class='form-label' for='user'>Username or Email</label>
-                        <input class='form-control' id='user' name='user' type='text' />
-
-                        <ul class="list-group">
-                            <li class="list-group-item" data-id=1 id='User1'>User1</li>
-                        </ul>
-
-                        <label class='form-label mt-2' for='role'>Role</label>
-                        <select class='custom-select' id='role' name='role'>
-                            <option selected value="VIEWER">Viewer</option>
-                            <option value="EDITOR">Editor</option>
-                        </select>
-
-                        <button type='submit' class='btn btn-secondary'>Add User</button>
-                    </form>
-                </div>
             </div>
         </div>
 
