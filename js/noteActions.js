@@ -27,8 +27,6 @@ function openNote(noteId, locked) {
 }
 
 function sendPwd(e) {
-
-
     var noteId = $(e.target).data('id')
     var Password = $('#notePwd').val();
 
@@ -172,3 +170,4 @@ function showError(msg) {
 
     window.setTimeout(function () { $("#errorDiv").hide() }, 2500)
 }
+

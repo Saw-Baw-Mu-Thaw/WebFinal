@@ -148,9 +148,12 @@ if (!isset($_SESSION['username'])) {
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <script src="js/index.js" type='module'></script>
-    <script src="js/logout.js"></script>
-    <script src="js/noteActions.js"></script>
+    <script src="./js/noteActions.js"></script>
+    <script src="./js/pinActions.js"></script>
+    <script type='module' src="./js/index.js"></script>
+    <script src="./js/logout.js"></script>
+
+    <!--  -->
 </body>
 
 </html>

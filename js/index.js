@@ -34,7 +34,7 @@ function setPreferences(elemList) {
         type: "GET",
         datatype: "json"
     }).done(function (response) {
-        // console.log(response)
+        console.log(response)
 
         if (response['code'] == 0) {
             // console.log("setting preferences");

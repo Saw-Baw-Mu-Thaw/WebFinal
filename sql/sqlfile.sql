@@ -4,18 +4,18 @@ CREATE TABLE Users(
     Email VARCHAR (50) NOT NULL,
     Password VARCHAR (60) NOT NULL,
     Verified INT DEFAULT 0,
-    ProfilePic VARCHAR (50) NULL,
+    ProfilePic VARCHAR (50) NULL
     );
     
     -- bawbawbaw : passWord123&
-    --- Iroh : iroH232*
+    -- Iroh : iroH232*
 INSERT INTO Users VALUES
 (1, 'bawbawbaw', 'bawbawbaw@gmail.com', '$2y$10$FAhpER8u.lR3UyELGxrB2u.jlgrMzaHUTi/8qizJilCjESjM6BpbC', 1, NULL),
 (2, 'Iroh', 'Iroh@gmail.com', '$2y$10$gJMe4PWhOAkRlYHejs0hausuEPdL38HbRSDarq4z6NdC25U9Vo.vq', 0, NULL);
 
 CREATE TABLE Notes(
     NoteID INT PRIMARY KEY AUTO_INCREMENT,
-    Title VARCHAR (50) UNIQUE,
+    Title VARCHAR (50),
     Location VARCHAR (150) NOT NULL,
     UserID INT NOT NULL,
     ModifiedDate DATETIME NOT NULL,
@@ -24,9 +24,9 @@ CREATE TABLE Notes(
     );
     
 INSERT INTO Notes VALUES
-(1, 'demo', 'notes/bawbawbaw/demo.txt', 1, NOW(), NULL);
+(1, 'demo', '../notes/bawbawbaw/demo.txt', 1, NOW(), NULL);
 
-CREATE TABLE Label(
+CREATE TABLE Labels(
     LabelID INT PRIMARY KEY AUTO_INCREMENT,
     NoteID INT NOT NULL,
     UserID INT NOT NULL,
@@ -64,8 +64,24 @@ CREATE TABLE SharedNotes(
     FOREIGN KEY (Collaborator) REFERENCES Users(UserID)
     );
 
-insert into notes(NoteID, Title, Location, UserID, ModifiedData, AttachedImg) VALUES
-(2, 'SharedNote', 'notes/bawbawbaw/SharedNote.txt', 1, NOW(), NULL);
+
+insert into notes(NoteID, Title, Location, UserID, ModifiedDate, AttachedImg) VALUES
+(2, 'SharedNote', '../notes/bawbawbaw/SharedNote.txt', 1, NOW(), NULL);
 
 insert into sharednotes(NoteID, OwnerID, Collaborator, Role) VALUES
 (2, 1, 2, 'VIEWER');
+
+CREATE TABLE PinnedNotes(
+    NoteID INT NOT NULL,
+    UserID INT NOT NULL,
+    Pinned INT DEFAULT 0,
+    PinnedTime DATETIME DEFAULT NULL,
+    FOREIGN KEY (NoteID) REFERENCES Notes(NoteID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    PRIMARY KEY (NoteID, UserID)
+);
+
+INSERT INTO PinnedNotes(NoteID, UserID, Pinned, PinnedTime) VALUES
+(1, 1, 0, NULL),
+(2, 1, 0, NULL),
+(2, 2, 0, NULL);

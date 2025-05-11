@@ -12,14 +12,21 @@ if ($_SERVER['REQUEST_METHOD'] != 'GET') {
 
 $id = $_SESSION['currNoteID'];
 $action = $_SESSION['action'];
+$userId = $_SESSION['userId'];
+
 
 $title = get_note_title($id);
 
 // need to check if shared note or whatnot
-// username might be different
-$location = "../notes/" . $_SESSION['username'] . '/' . $title . '.txt';
-$file = fopen($location, 'r');
+// might not be creator
+$location = get_location($id);
+$role = "EDITOR";
+if (is_shared_note($userId, $id)) {
+    $role = get_role($userId, $id);
+}
 
-$contents = fread($file, filesize($location));
+$contents = file_get_contents($location);
 
-die(json_encode(array('code' => 0, 'title' => $title, 'contents' => $contents, 'action' => $action)));
+$labels = get_labels($userId, $id);
+
+die(json_encode(array('code' => 0, 'title' => $title, 'contents' => $contents, 'action' => $action, 'role' => $role, 'labels' => $labels)));
