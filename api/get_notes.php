@@ -25,6 +25,7 @@ foreach ($rows as $note) {
         "LastModified" => $note['ModifiedDate'],
         "AttachedImg" => $note['AttachedImg'],
         "Pinned" => (bool)$note['Pinned'],
+        "SharedNote" => is_shared_note($_SESSION['userId'], $note['NoteID'])
     );
     array_push($array, $temp);
 }

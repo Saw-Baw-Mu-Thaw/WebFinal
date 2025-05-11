@@ -40,7 +40,11 @@ function generateList(response) {
         }
         $(pinCell).append(pinBtn);
 
-        $(actionCell).append(openBtn, delBtn, lockBtn);
+        if (obj['SharedNote'] == true) {
+            $(actionCell).append(openBtn);
+        } else {
+            $(actionCell).append(openBtn, delBtn, lockBtn);
+        }
         $(trow).append(index, title, lastModified, actionCell, pinCell);
         $(tbody).append(trow);
     }

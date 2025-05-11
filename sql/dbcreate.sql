@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2025 at 11:36 AM
+-- Generation Time: May 11, 2025 at 05:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -26,15 +26,22 @@ USE `skeletondb`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `label`
+-- Table structure for table `labels`
 --
 
-CREATE TABLE `label` (
+CREATE TABLE `labels` (
   `LabelID` int(11) NOT NULL,
   `NoteID` int(11) NOT NULL,
   `UserID` int(11) NOT NULL,
   `Label` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `labels`
+--
+
+INSERT INTO `labels` (`LabelID`, `NoteID`, `UserID`, `Label`) VALUES
+(1, 3, 2, 'rotato');
 
 -- --------------------------------------------------------
 
@@ -67,8 +74,32 @@ CREATE TABLE `notes` (
 --
 
 INSERT INTO `notes` (`NoteID`, `Title`, `Location`, `UserID`, `ModifiedDate`, `AttachedImg`) VALUES
-(1, 'demo', 'notes/bawbawbaw/demo.txt', 1, '2025-05-05 15:00:40', NULL),
-(2, 'SharedNote', 'notes/bawbawbaw/SharedNote.txt', 1, '2025-05-05 15:04:35', NULL);
+(1, 'demo', '../notes/bawbawbaw/demo.txt', 1, '2025-05-11 09:09:55', NULL),
+(2, 'SharedNote', '../notes/bawbawbaw/SharedNote.txt', 1, '2025-05-11 09:41:01', NULL),
+(3, 'My Nue Note', '../notes/Iroh/MyNueNote.txt', 2, '2025-05-11 12:17:30', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pinnednotes`
+--
+
+CREATE TABLE `pinnednotes` (
+  `NoteID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `Pinned` int(11) DEFAULT 0,
+  `PinnedTime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pinnednotes`
+--
+
+INSERT INTO `pinnednotes` (`NoteID`, `UserID`, `Pinned`, `PinnedTime`) VALUES
+(1, 1, 0, NULL),
+(2, 1, 1, '2025-05-11 09:16:17'),
+(2, 2, 0, NULL),
+(3, 2, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -139,9 +170,9 @@ INSERT INTO `users` (`UserID`, `Username`, `Email`, `Password`, `Verified`, `Pro
 --
 
 --
--- Indexes for table `label`
+-- Indexes for table `labels`
 --
-ALTER TABLE `label`
+ALTER TABLE `labels`
   ADD PRIMARY KEY (`LabelID`),
   ADD KEY `NoteID` (`NoteID`),
   ADD KEY `UserID` (`UserID`);
@@ -157,7 +188,13 @@ ALTER TABLE `lockednotes`
 --
 ALTER TABLE `notes`
   ADD PRIMARY KEY (`NoteID`),
-  ADD UNIQUE KEY `Title` (`Title`),
+  ADD KEY `UserID` (`UserID`);
+
+--
+-- Indexes for table `pinnednotes`
+--
+ALTER TABLE `pinnednotes`
+  ADD PRIMARY KEY (`NoteID`,`UserID`),
   ADD KEY `UserID` (`UserID`);
 
 --
@@ -186,16 +223,16 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `label`
+-- AUTO_INCREMENT for table `labels`
 --
-ALTER TABLE `label`
-  MODIFY `LabelID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `labels`
+  MODIFY `LabelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `notes`
 --
 ALTER TABLE `notes`
-  MODIFY `NoteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `NoteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -208,11 +245,11 @@ ALTER TABLE `users`
 --
 
 --
--- Constraints for table `label`
+-- Constraints for table `labels`
 --
-ALTER TABLE `label`
-  ADD CONSTRAINT `label_ibfk_1` FOREIGN KEY (`NoteID`) REFERENCES `notes` (`NoteID`),
-  ADD CONSTRAINT `label_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
+ALTER TABLE `labels`
+  ADD CONSTRAINT `labels_ibfk_1` FOREIGN KEY (`NoteID`) REFERENCES `notes` (`NoteID`),
+  ADD CONSTRAINT `labels_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
 
 --
 -- Constraints for table `lockednotes`
@@ -225,6 +262,13 @@ ALTER TABLE `lockednotes`
 --
 ALTER TABLE `notes`
   ADD CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
+
+--
+-- Constraints for table `pinnednotes`
+--
+ALTER TABLE `pinnednotes`
+  ADD CONSTRAINT `pinnednotes_ibfk_1` FOREIGN KEY (`NoteID`) REFERENCES `notes` (`NoteID`),
+  ADD CONSTRAINT `pinnednotes_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
 
 --
 -- Constraints for table `preferences`

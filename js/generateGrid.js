@@ -29,9 +29,9 @@ function generateGrid(obj) {
 
     var pinBtn;
     if (obj['Pinned'] == true) {
-        pinBtn = $(`<button class='btn btn-primary mx-1' onclick='removePin(${obj['NoteID']})'>`
-            `<span style='color:red;'><i class="fas fa-thumbtack"></i></span>` +
-            `</button>`)
+        pinBtn = $(`<button class='btn btn-primary' onclick='removePin(${obj['NoteID']})'>
+                <span style='color:red;'><i class="fas fa-thumbtack"></i></span>
+                </button>`)
     } else {
         pinBtn = $(`<button class='btn btn-primary mx-1' onclick='addPin(${obj['NoteID']})'>
             <span style='color:blue;'><i class="fas fa-thumbtack"></i></span>
@@ -39,7 +39,11 @@ function generateGrid(obj) {
     }
 
     $(cardTitle).prepend(pinBtn);
-    $(cardBody).append(cardTitle, cardText, openBtn, delBtn, lockBtn);
+    if (obj['SharedNote'] == true) {
+        $(cardBody).append(cardTitle, cardText, openBtn);
+    } else {
+        $(cardBody).append(cardTitle, cardText, openBtn, delBtn, lockBtn);
+    }
     $(card).append(cardBody);
     $("#mainContent").append(card);
 
