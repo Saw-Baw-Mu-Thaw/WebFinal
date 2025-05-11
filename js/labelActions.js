@@ -18,5 +18,15 @@ function addLabel() {
 function deleteLabel(e) {
     var labelId = $(e.target).data('id');
 
+    // console.log('Delete label', labelId);
     // send delete ajax
+    $.ajax({
+        url: 'api/delete_label.php?id=' + labelId,
+        type: "DELETE",
+        datatype: 'json'
+    }).done(function (response) {
+        if (response['code'] == 0) {
+            location.reload();
+        }
+    })
 }

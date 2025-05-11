@@ -46,6 +46,7 @@ if (!isset($_SESSION['username'])) {
         </div>
 
         <div class="row border rounded mt-1 p-2">
+            <h3>Labels</h3>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">#</span>
@@ -56,7 +57,8 @@ if (!isset($_SESSION['username'])) {
                 </div>
             </div>
 
-            <div id='labelDiv'>
+
+            <div id='labelDiv' class='p-1'>
 
             </div>
         </div>

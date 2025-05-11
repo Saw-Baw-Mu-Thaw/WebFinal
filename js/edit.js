@@ -14,7 +14,6 @@ $(document).ready(function () {
     $('#title').on('input', saveContent);
     $('#textareaElem').on('input', saveContent);
     $('#homeBtn').on('click', goHome);
-    $('#User1').on('click', shareNote);
     $('#AddLabelBtn').on('click', addLabel);
 
 })
@@ -52,8 +51,8 @@ function getNoteContents() {
             var labels = response['labels']
             for (i = 0; i < labels.length; i++) {
                 var label = labels[i];
-                var labelElem = $(`<div class='d-inline border border-info rounded p-1'>#${label['Label']}</div>`)
-                var labelDeleteBtn = $(`<button class='d-inline btn btn-danger' data-id=${label['LabelID']}>&times;</button>`)
+                var labelElem = $(`<div class='d-inline border border-info rounded p-3 m-1'>#${label['Label']}</div>`)
+                var labelDeleteBtn = $(`<button class='btn btn-danger' data-id=${label['LabelID']}>&times;</button>`)
                 $(labelDeleteBtn).on('click', deleteLabel);
                 $(labelElem).append(labelDeleteBtn)
                 $('#labelDiv').append(labelElem)
@@ -148,7 +147,3 @@ function goHome() {
     location.replace("index.php");
 }
 
-function shareNote(e) {
-    userId = $(e.target).data('id')
-    console.log('clicked user ' + userId);
-}
