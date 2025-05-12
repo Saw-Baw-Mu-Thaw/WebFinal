@@ -26,6 +26,29 @@ function openNote(noteId, locked) {
 
 }
 
+/**
+ * Open a note by its ID (used by notifications)
+ * @param {number} noteId The note ID to open
+ */
+function openNoteById(noteId) {
+    $.ajax({
+        url: 'api/open_note.php',
+        type: "POST",
+        datatype: "json",
+        contentType: 'application/json',
+        data: JSON.stringify({ noteId: noteId })
+    }).done(function (response) {
+        if (response['code'] == 0) {
+            window.location.replace("edit.php");
+        } else {
+            showError(response['message'])
+        }
+    });
+}
+
+// Make openNoteById available globally for the notifications system
+window.openNoteById = openNoteById;
+
 function sendPwd(e) {
     var noteId = $(e.target).data('id')
     var Password = $('#notePwd').val();

@@ -42,6 +42,64 @@ if (!isset($_SESSION['username'])) {
                 <div class="col-4 text-center" id="statusDiv">
 
                 </div>
+
+                <div class="d-flex justify-content-end col-4">
+                    <button class="btn btn-info" type="button" id="shareBtn" data-toggle="modal" data-target="#shareModal">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Modal -->
+        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shareModalLabel">Share Note</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="shareErrorMsg" class="alert alert-danger d-none"></div>
+                        <div id="shareSuccessMsg" class="alert alert-success d-none"></div>
+                        
+                        <div class="form-group">
+                            <label for="shareEmail">Email address</label>
+                            <input type="email" class="form-control" id="shareEmail" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">Enter the email of a registered user.</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sharePermission">Permission</label>
+                            <select class="form-control" id="sharePermission">
+                                <option value="VIEWER">View only</option>
+                                <option value="EDITOR">Can edit</option>
+                            </select>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary" id="addShareBtn">Share</button>
+                        
+                        <hr>
+                        
+                        <h5>Shared with</h5>
+                        <div id="collaboratorsList" class="mt-3">
+                            <!-- Collaborators will be listed here -->
+                            <div class="text-center" id="loadingCollaborators">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                            <div id="noCollaboratorsMsg" class="alert alert-info d-none">
+                                This note is not shared with anyone yet.
+                            </div>
+                            <ul class="list-group" id="collaboratorsListGroup">
+                                <!-- Collaborators items will be added here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -86,6 +144,7 @@ if (!isset($_SESSION['username'])) {
     <script src="js/edit.js"></script>
     <script src="js/logout.js"></script>
     <script src='js/labelActions.js'></script>
+    <script src='js/shareNote.js'></script>
 </body>
 
 </html>

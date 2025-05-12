@@ -27,6 +27,27 @@ if (!isset($_SESSION['username'])) {
                 <img class="img-fluid" src="images/Skeleton.png" alt="SkeleLogo" />
             </div>
             <div class="d-flex col-3 justify-content-end align-items-center">
+                <!-- Notifications dropdown -->
+                <div class="dropdown mr-2">
+                    <button class="btn btn-secondary position-relative" type="button" id="notificationsBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span id="notificationBadge" class="position-absolute badge badge-danger d-none" style="top: -5px; right: -5px;">0</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsBtn" style="width: 300px; max-height: 300px; overflow-y: auto;">
+                        <h6 class="dropdown-header">Notifications</h6>
+                        <div id="notificationsContainer">
+                            <div class="text-center p-2" id="loadingNotifications">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-item text-center text-muted d-none" id="noNotificationsMsg">
+                                No notifications
+                            </div>
+                            <!-- Notifications will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
                 <button class="btn btn-secondary" onclick="Logout()">Logout</button>
             </div>
         </div>
@@ -152,6 +173,7 @@ if (!isset($_SESSION['username'])) {
     <script src="./js/pinActions.js"></script>
     <script type='module' src="./js/index.js"></script>
     <script src="./js/logout.js"></script>
+    <script src="./js/notifications.js"></script>
 
     <!--  -->
 </body>
