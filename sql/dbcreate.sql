@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2025 at 05:25 PM
+-- Generation Time: May 12, 2025 at 06:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -77,6 +77,21 @@ INSERT INTO `notes` (`NoteID`, `Title`, `Location`, `UserID`, `ModifiedDate`, `A
 (1, 'demo', '../notes/bawbawbaw/demo.txt', 1, '2025-05-11 09:09:55', NULL),
 (2, 'SharedNote', '../notes/bawbawbaw/SharedNote.txt', 1, '2025-05-11 09:41:01', NULL),
 (3, 'My Nue Note', '../notes/Iroh/MyNueNote.txt', 2, '2025-05-11 12:17:30', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `NotificationID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `NoteID` int(11) NOT NULL,
+  `Message` varchar(255) NOT NULL,
+  `IsRead` tinyint(1) DEFAULT 0,
+  `CreatedAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -191,6 +206,14 @@ ALTER TABLE `notes`
   ADD KEY `UserID` (`UserID`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`NotificationID`),
+  ADD KEY `UserID` (`UserID`),
+  ADD KEY `NoteID` (`NoteID`);
+
+--
 -- Indexes for table `pinnednotes`
 --
 ALTER TABLE `pinnednotes`
@@ -235,6 +258,12 @@ ALTER TABLE `notes`
   MODIFY `NoteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -262,6 +291,13 @@ ALTER TABLE `lockednotes`
 --
 ALTER TABLE `notes`
   ADD CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`),
+  ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`NoteID`) REFERENCES `notes` (`NoteID`);
 
 --
 -- Constraints for table `pinnednotes`

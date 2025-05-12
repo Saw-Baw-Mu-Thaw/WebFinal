@@ -1,5 +1,8 @@
+import { changeMode } from "./mode.js";
+import { changeLayout } from "./layout.js";
 import { generateGrid } from "./generateGrid.js";
 import { generateList } from "./generateList.js";
+
 
 
 function getNotesGrid() {
@@ -23,7 +26,7 @@ function getNotesList() {
         type: "GET",
         datatype: "json"
     }).done(function (response) {
-        console.log(response);
+        // console.log(response);
         generateList(response);
     });
 }
@@ -53,18 +56,29 @@ function setPreferences(elemList) {
             }
 
             // set light or dark mode here
-            // for (var i = 0; i < elemList.length; i++) {
-            //     // console.log(elemList[i]) 
 
-            //     // replace bg-light and bg-dark with custom class
-            //     $(elemList[i]).removeClass("bg-light bg-dark");
-            //     if (response['Mode'] == "LIGHT") {
-            //         $(elemList[i]).addClass("bg-light");
-            //     } else {
-            //         $(elemList[i]).addClass("bg-dark");
-            //     }
-            //     $('div.modal-open').removeClass('bg-light bg-dark')
-            // }
+            if (response['Layout'] == "GRID") {
+                checkElementExists('.card', 5).then((result) => {
+                    if (result) {
+                        if (response['Mode'] == 'DARK') {
+                            $('.mode-target').addClass('bg-dark')
+                        } else {
+                            $('.mode-target').addClass('bg-light')
+                        }
+                    }
+                })
+            } else {
+                checkElementExists('.table', 5).then((result) => {
+                    if (result) {
+                        if (response['Mode'] == 'DARK') {
+                            $('.mode-target').addClass('bg-dark')
+                        } else {
+                            $('.mode-target').addClass('bg-light')
+                        }
+                    }
+                })
+            }
+
         }
     })
 }
@@ -81,14 +95,33 @@ function setUsernameHeading() {
     })
 }
 
+async function checkElementExists(element, timeout = Infinity) {
+    let startTime = Date.now();
+    return new Promise((resolve) => {
+        const intervalId = setInterval(() => {
+            if (document.querySelector(element)) {
+                clearInterval(intervalId);
+                resolve(true);
+            } else if (Date.now() - startTime >= timeout * 1000) {
+                clearInterval(intervalId);
+                resolve(false);
+            }
+        }, 100);
+    });
+}
+
 
 
 
 
 $(document).ready(function () {
     $("#errorDiv").hide();
+
+    $('input:radio[name=mode]').on('click', changeMode)
+    $('input:radio[name=layout]').on('click', changeLayout)
     // use display block to show it
     setUsernameHeading();
     // getNotes();
     setPreferences(['body', 'div', 'h4', 'h5']);
 });
+

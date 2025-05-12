@@ -21,9 +21,9 @@ if (!isset($_SESSION['username'])) {
     <title>Edit</title>
 </head>
 
-<body>
-    <div class="container">
-        <div class="row">
+<body class='mode-target'>
+    <div class="container mode-target">
+        <div class="row mode-target">
             <div class="col-3 mr-auto p-3 text-center">
                 <img class="img-fluid" src="images/Skeleton.png" alt="SkeleLogo" />
             </div>
@@ -34,16 +34,27 @@ if (!isset($_SESSION['username'])) {
 
         <div class="border rounded">
             <div class="row p-3">
-                <div class="d-flex justify-content-start col-4">
+                <div class="d-flex justify-content-start col-3">
                     <button class="btn btn-primary" type="button" id="homeBtn">
                         <i class="fas fa-home"></i></button>
                 </div>
 
-                <div class="col-4 text-center" id="statusDiv">
+                <div class="col-3 text-center" id="statusDiv">
 
                 </div>
 
-                <div class="d-flex justify-content-end col-4">
+                <div class="col-3">
+                    <div class='btn-group btn-group-toggle border rounded m-1' data-toggle="button">
+                        <label class="btn btn-light">
+                            <input type="radio" name="mode" value='LIGHT'> <i class="far fa-sun"></i>
+                        </label>
+                        <label class="btn btn-dark">
+                            <input type='radio' name='mode' value='DARK'> <i class="far fa-moon"></i>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end col-3">
                     <button class="btn btn-info" type="button" id="shareBtn" data-toggle="modal" data-target="#shareModal">
                         <i class="fas fa-share-alt"></i> Share
                     </button>
@@ -64,13 +75,13 @@ if (!isset($_SESSION['username'])) {
                     <div class="modal-body">
                         <div id="shareErrorMsg" class="alert alert-danger d-none"></div>
                         <div id="shareSuccessMsg" class="alert alert-success d-none"></div>
-                        
+
                         <div class="form-group">
                             <label for="shareEmail">Email address</label>
                             <input type="email" class="form-control" id="shareEmail" placeholder="Enter email">
                             <small id="emailHelp" class="form-text text-muted">Enter the email of a registered user.</small>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="sharePermission">Permission</label>
                             <select class="form-control" id="sharePermission">
@@ -78,11 +89,11 @@ if (!isset($_SESSION['username'])) {
                                 <option value="EDITOR">Can edit</option>
                             </select>
                         </div>
-                        
+
                         <button type="button" class="btn btn-primary" id="addShareBtn">Share</button>
-                        
+
                         <hr>
-                        
+
                         <h5>Shared with</h5>
                         <div id="collaboratorsList" class="mt-3">
                             <!-- Collaborators will be listed here -->
@@ -141,7 +152,7 @@ if (!isset($_SESSION['username'])) {
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <script src="js/edit.js"></script>
+    <script src="js/edit.js" type="module"></script>
     <script src="js/logout.js"></script>
     <script src='js/labelActions.js'></script>
     <script src='js/shareNote.js'></script>

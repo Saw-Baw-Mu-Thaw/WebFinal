@@ -3,7 +3,7 @@ import { formatDatetime } from "./utils.js";
 function generateGrid(obj) {
 
     // create a row of cards
-    var card = $("<div class='card col-lg-4 col-12 m-1'></div>");
+    var card = $("<div class='card col-lg-4 col-12 m-1 mode-target'></div>");
     var cardBody = $("<div class='card-body'></div>");
     var cardTitle = $("<h5 class='card-title'></h5>").text(obj['Title']);
     var cardText = $("<p class='card-text'></p>").html("Last Modified : " + formatDatetime(obj['LastModified']));
@@ -37,6 +37,19 @@ function generateGrid(obj) {
             <span style='color:blue;'><i class="fas fa-thumbtack"></i></span>
             </button>`)
     }
+
+    $(cardText).append("<hr>")
+    var labelString = ""
+    var labelList = obj['Labels']
+    // console.log(labelList)
+    for (var j = 0; j < labelList.length; j++) {
+        labelString += "#" + labelList[j]['Label'] + " "
+    }
+    var labelhead = $('<h4>Labels</h4>')
+    var labelp = $(`<p class='m-1'>${labelString}</p>`)
+    $(cardText).append(labelhead)
+    $(cardText).append(labelp)
+    $(cardText).append("<hr>")
 
     $(cardTitle).prepend(pinBtn);
     if (obj['SharedNote'] == true) {

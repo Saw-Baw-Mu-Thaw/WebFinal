@@ -1,3 +1,5 @@
+import { changeMode } from "./mode.js";
+
 var noteChanged = false;
 var timeout = null;
 var failInterval = null;
@@ -16,6 +18,7 @@ $(document).ready(function () {
     $('#homeBtn').on('click', goHome);
     $('#AddLabelBtn').on('click', addLabel);
 
+    //$('input:radio[name=mode]').on('click', changeMode)
 })
 
 function getNoteContents() {
@@ -58,6 +61,8 @@ function getNoteContents() {
                 $('#labelDiv').append(labelElem)
             }
             showSaved()
+
+            //setPreferences();
         }
     }).fail(function () {
         alert("Could not connect to server")
@@ -147,3 +152,19 @@ function goHome() {
     location.replace("index.php");
 }
 
+// set light mode or dark mode
+function setPreferences() {
+    $.ajax({
+        url: 'api/get_preferences.php',
+        type: "GET",
+        datatype: "json"
+    }).done(function (response) {
+        if (response['code'] == 0) {
+            if (response['Mode'] == 'DARK') {
+                $('.mode-target').addClass('bg-dark')
+            } else {
+                $('.mode-target').addClass('bg-light')
+            }
+        }
+    })
+}

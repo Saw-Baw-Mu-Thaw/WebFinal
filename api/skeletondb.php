@@ -115,10 +115,6 @@ function delete_note($noteID)
 {
     $conn = get_conn();
 
-    $statement = mysqli_prepare($conn, "Delete From Notes where NoteID = ?");
-    mysqli_stmt_bind_param($statement, "i", $noteID);
-    $res1 = mysqli_stmt_execute($statement);
-
     $statement = mysqli_prepare($conn, "delete from LockedNotes where NoteID = ?");
     mysqli_stmt_bind_param($statement, "i", $noteID);
     $res2 = mysqli_stmt_execute($statement);
@@ -127,7 +123,28 @@ function delete_note($noteID)
     mysqli_stmt_bind_param($statement, "i", $noteID);
     $res3 = mysqli_stmt_execute($statement);
 
-    return $res1 && $res2 && $res3;
+    $query = "Delete From PinnedNotes Where NoteID = ?";
+    $statement = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($statement, 'i', $noteID);
+    $res4 = mysqli_execute($statement);
+
+    $query = "Delete From Labels Where NoteID = ?";
+    $statement = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($statement, 'i', $noteID);
+    $res5 = mysqli_execute($statement);
+
+    $query = "Delete From Notifications Where NoteID = ?";
+    $statement = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($statement, 'i', $noteID);
+    $res6 = mysqli_execute($statement);
+
+    $statement = mysqli_prepare($conn, "Delete From Notes where NoteID = ?");
+    mysqli_stmt_bind_param($statement, "i", $noteID);
+    $res1 = mysqli_stmt_execute($statement);
+
+    mysqli_close($conn);
+
+    return $res1 && $res2 && $res3 && $res4 && $res5 && $res6;
 }
 
 
@@ -350,6 +367,7 @@ function get_labels($userId, $noteId)
     return $rows;
 }
 
+
 /**
  * Checks if an email belongs to a registered user
  * @param string $email The email to check
@@ -358,16 +376,16 @@ function get_labels($userId, $noteId)
 function check_user_email($email)
 {
     $conn = get_conn();
-    
+
     $query = "SELECT UserID, Username FROM users WHERE Email = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $user = mysqli_fetch_assoc($result);
-    
+
     mysqli_close($conn);
-    
+
     if ($user) {
         return $user;
     }
@@ -385,14 +403,14 @@ function check_user_email($email)
 function share_note($noteId, $ownerId, $collaboratorId, $role)
 {
     $conn = get_conn();
-    
+
     // Check if sharing already exists
     $query = "SELECT 1 FROM SharedNotes WHERE NoteID = ? AND OwnerID = ? AND Collaborator = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "iii", $noteId, $ownerId, $collaboratorId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    
+
     if (mysqli_num_rows($result) > 0) {
         // Update existing sharing
         $query = "UPDATE SharedNotes SET Role = ? WHERE NoteID = ? AND OwnerID = ? AND Collaborator = ?";
@@ -404,23 +422,23 @@ function share_note($noteId, $ownerId, $collaboratorId, $role)
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "iiis", $noteId, $ownerId, $collaboratorId, $role);
     }
-    
+
     $result = mysqli_stmt_execute($stmt);
-    
+
     // If sharing successful, add default pin for the collaborator
     if ($result) {
         $query = "INSERT IGNORE INTO PinnedNotes (NoteID, UserID, Pinned, PinnedTime) VALUES (?, ?, 0, NULL)";
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "ii", $noteId, $collaboratorId);
         mysqli_stmt_execute($stmt);
-        
+
         // Add notification for the collaborator
         $noteTitle = get_note_title($noteId);
         $ownerUsername = get_username($ownerId);
         $message = "User '$ownerUsername' shared note '$noteTitle' with you";
         add_notification($collaboratorId, $noteId, $message);
     }
-    
+
     mysqli_close($conn);
     return $result;
 }
@@ -435,12 +453,12 @@ function share_note($noteId, $ownerId, $collaboratorId, $role)
 function revoke_note_sharing($noteId, $ownerId, $collaboratorId)
 {
     $conn = get_conn();
-    
+
     $query = "DELETE FROM SharedNotes WHERE NoteID = ? AND OwnerID = ? AND Collaborator = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "iii", $noteId, $ownerId, $collaboratorId);
     $result = mysqli_stmt_execute($stmt);
-    
+
     mysqli_close($conn);
     return $result;
 }
@@ -455,12 +473,12 @@ function revoke_note_sharing($noteId, $ownerId, $collaboratorId)
 function add_notification($userId, $noteId, $message)
 {
     $conn = get_conn();
-    
+
     $query = "INSERT INTO notifications (UserID, NoteID, Message, IsRead, CreatedAt) VALUES (?, ?, ?, 0, NOW())";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "iis", $userId, $noteId, $message);
     $result = mysqli_stmt_execute($stmt);
-    
+
     mysqli_close($conn);
     return $result;
 }
@@ -473,7 +491,7 @@ function add_notification($userId, $noteId, $message)
 function get_notifications($userId)
 {
     $conn = get_conn();
-    
+
     $query = "SELECT n.NotificationID, n.NoteID, n.Message, n.IsRead, n.CreatedAt, nt.Title as NoteTitle 
               FROM notifications n 
               JOIN notes nt ON n.NoteID = nt.NoteID 
@@ -484,7 +502,7 @@ function get_notifications($userId)
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $notifications = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    
+
     mysqli_close($conn);
     return $notifications;
 }
@@ -497,12 +515,12 @@ function get_notifications($userId)
 function mark_notification_read($notificationId)
 {
     $conn = get_conn();
-    
+
     $query = "UPDATE notifications SET IsRead = 1 WHERE NotificationID = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "i", $notificationId);
     $result = mysqli_stmt_execute($stmt);
-    
+
     mysqli_close($conn);
     return $result;
 }
@@ -516,7 +534,7 @@ function mark_notification_read($notificationId)
 function get_collaborators($noteId, $ownerId)
 {
     $conn = get_conn();
-    
+
     $query = "SELECT s.Collaborator, s.Role, u.Username, u.Email 
               FROM SharedNotes s 
               JOIN users u ON s.Collaborator = u.UserID 
@@ -526,7 +544,7 @@ function get_collaborators($noteId, $ownerId)
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $collaborators = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    
+
     mysqli_close($conn);
     return $collaborators;
 }
@@ -539,14 +557,14 @@ function get_collaborators($noteId, $ownerId)
 function get_username($userId)
 {
     $conn = get_conn();
-    
+
     $query = "SELECT Username FROM users WHERE UserID = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "i", $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $user = mysqli_fetch_assoc($result);
-    
+
     mysqli_close($conn);
     return $user ? $user['Username'] : '';
 }
@@ -560,15 +578,51 @@ function get_username($userId)
 function is_note_owner($userId, $noteId)
 {
     $conn = get_conn();
-    
+
     $query = "SELECT 1 FROM notes WHERE NoteID = ? AND UserID = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "ii", $noteId, $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    
+
     $isOwner = mysqli_num_rows($result) > 0;
-    
+
     mysqli_close($conn);
     return $isOwner;
+}
+
+function delete_label($labelId)
+{
+    $conn = get_conn();
+
+    $query = "Delete From Labels Where LabelID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'i', $labelId);
+    $res = mysqli_execute($stmt);
+    mysqli_close($conn);
+    return $res;
+}
+
+function update_mode($userId, $mode)
+{
+    $conn = get_conn();
+
+    $query = "Update Preferences Set Mode = ? Where UserID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'si', $mode, $userId);
+    $res = mysqli_execute($stmt);
+    mysqli_close($conn);
+    return $res;
+}
+
+function update_layout($userId, $layout)
+{
+    $conn = get_conn();
+
+    $query = "Update Preferences Set Layout = ? Where UserID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'si', $layout, $userId);
+    $res = mysqli_execute($stmt);
+    mysqli_close($conn);
+    return $res;
 }

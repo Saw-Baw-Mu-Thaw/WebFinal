@@ -1,5 +1,5 @@
 function openNote(noteId, locked) {
-    // console.log(noteId, locked);
+    console.log(noteId, locked);
 
     if (locked) {
         // invoke password modal here
@@ -47,7 +47,7 @@ function openNoteById(noteId) {
 }
 
 // Make openNoteById available globally for the notifications system
-window.openNoteById = openNoteById;
+// window.openNoteById = openNoteById;
 
 function sendPwd(e) {
     var noteId = $(e.target).data('id')

@@ -2,10 +2,10 @@ import { formatDatetime } from "./utils.js";
 
 function generateList(response) {
 
-    var table = $("<table class='table col-12'></table>")
+    var table = $("<table class='table col-12 mode-target'></table>")
     var thead = $("<thead></thead>")
     var headRow = $("<tr></tr>")
-    $(headRow).append("<th>Index</th>", "<th>Title</th>", "<th>Last Modified</th>", "<th>Actions</th>", "<th>Pin</th>");
+    $(headRow).append("<th>Index</th>", "<th>Title</th>", "<th>Last Modified</th>", "<th>Actions</th>", "<th>Labels</th>", "<th>Pin</th>");
     $(thead).append(headRow)
     $(table).append(thead)
 
@@ -40,12 +40,21 @@ function generateList(response) {
         }
         $(pinCell).append(pinBtn);
 
+        var labelCell = $("<td></td>")
+        var labelString = ""
+        var labelList = obj['Labels']
+        // console.log(labelList)
+        for (var j = 0; j < labelList.length; j++) {
+            labelString += "#" + labelList[j]['Label'] + " "
+        }
+        $(labelCell).text(labelString)
+
         if (obj['SharedNote'] == true) {
             $(actionCell).append(openBtn);
         } else {
             $(actionCell).append(openBtn, delBtn, lockBtn);
         }
-        $(trow).append(index, title, lastModified, actionCell, pinCell);
+        $(trow).append(index, title, lastModified, actionCell, labelCell, pinCell);
         $(tbody).append(trow);
     }
 

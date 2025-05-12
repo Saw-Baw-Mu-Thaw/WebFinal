@@ -30,11 +30,11 @@ $contents = file_get_contents($location);
 $labels = get_labels($userId, $id);
 
 die(json_encode(array(
-    'code' => 0, 
-    'title' => $title, 
-    'contents' => $contents, 
-    'action' => $action, 
-    'role' => $role, 
+    'code' => 0,
+    'title' => $title,
+    'contents' => $contents,
+    'action' => $action,
+    'role' => $role,
     'labels' => $labels,
     'NoteID' => $id
 )));
