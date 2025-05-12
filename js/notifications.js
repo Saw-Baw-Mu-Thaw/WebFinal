@@ -66,7 +66,7 @@ function loadNotifications() {
                     // Add click handler to open the note
                     notificationItem.on('click', function(e) {
                         e.preventDefault();
-                        openNote(notification.NoteID);
+                        openNoteFromNotification(notification.NoteID);
                         
                         // Mark as read if it's unread
                         if (!isRead) {
@@ -105,10 +105,10 @@ function markNotificationRead(notificationId) {
 }
 
 /**
- * Open a note
+ * Open a note from a notification
  */
-function openNote(noteId) {
-    // Use existing openNote function from noteActions.js if available
+function openNoteFromNotification(noteId) {
+    // Use existing openNoteById function from noteActions.js if available
     if (typeof window.openNoteById === 'function') {
         window.openNoteById(noteId);
     } else {
