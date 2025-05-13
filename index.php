@@ -194,7 +194,7 @@ if (!isset($_SESSION['username'])) {
     <script type="module" src='./js/utils.js'></script>
     <script src="./js/logout.js"></script>
     <script src='./js/notifications.js'></script>
-
+    <script src='./js/imgUpload.js'></script>
     <!--  -->
 </body>
 

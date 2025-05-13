@@ -20,10 +20,26 @@ function generateGrid(obj) {
 
     if (obj['AttachedImg'] != null) {
         var attachedImg = $(`<img class='card-img-top' src='${obj['AttachedImg']}' />`)
+
+        if (obj['SharedNote'] == false) {
+            $(attachedImg).on('drop', imgDropHandler)
+            $(attachedImg).on('dragover', imgDragOverHandler)
+            $(attachedImg).on('dragenter', imgDragEnter)
+            $(attachedImg).on('dragleave', imgDragLeave)
+            $(attachedImg).attr('data-id', obj['NoteID'])
+        }
         $(card).append(attachedImg);
+
     } else {
         // you can replace the default_image, probably something smaller
         var attachedImg = $("<img class='card-img-top' src='images/default_image.png' />")
+        if (obj['SharedNote'] == false) {
+            $(attachedImg).on('drop', imgDropHandler)
+            $(attachedImg).on('dragover', imgDragOverHandler)
+            $(attachedImg).on('dragenter', imgDragEnter)
+            $(attachedImg).on('dragleave', imgDragLeave)
+            $(attachedImg).attr('data-id', obj['NoteID'])
+        }
         $(card).append(attachedImg);
     }
 

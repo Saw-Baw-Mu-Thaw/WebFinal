@@ -33,17 +33,10 @@ if (!isset($_SESSION['username'])) {
         </div>
 
         <div class="border rounded">
-            <div class="row p-3">
-                <div class="d-flex justify-content-start col-3">
+            <div class="row p-3 mode-target">
+                <div class="col-4 p-1">
                     <button class="btn btn-primary" type="button" id="homeBtn">
                         <i class="fas fa-home"></i></button>
-                </div>
-
-                <div class="col-3 text-center" id="statusDiv">
-
-                </div>
-
-                <div class="col-3">
                     <div class='btn-group btn-group-toggle border rounded m-1' data-toggle="button">
                         <label class="btn btn-light">
                             <input type="radio" name="mode" value='LIGHT'> <i class="far fa-sun"></i>
@@ -54,10 +47,19 @@ if (!isset($_SESSION['username'])) {
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end col-3">
-                    <button class="btn btn-info" type="button" id="shareBtn" data-toggle="modal" data-target="#shareModal">
-                        <i class="fas fa-share-alt"></i> Share
-                    </button>
+                <div class="col-4 text-center" id="statusDiv">
+
+                </div>
+
+
+
+                <div class="col-4 p-1">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-info ml-auto" type="button" id="shareBtn" data-toggle="modal" data-target="#shareModal">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -114,23 +116,26 @@ if (!isset($_SESSION['username'])) {
             </div>
         </div>
 
-        <div class="row border rounded mt-1 p-2">
-            <h3>Labels</h3>
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">#</span>
+        <div class="border-bottom">
+            <div class="row mt-1 p-3 mode-target">
+                <h3>Labels</h3>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">#</span>
+                    </div>
+                    <input id='txtLabel' type="text" class="form-control" placeholder="Label">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="AddLabelBtn">Add Label</button>
+                    </div>
                 </div>
-                <input id='txtLabel' type="text" class="form-control" placeholder="Label">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="AddLabelBtn">Add Label</button>
+
+
+                <div id='labelDiv' class='p-1'>
+
                 </div>
-            </div>
-
-
-            <div id='labelDiv' class='p-1'>
-
             </div>
         </div>
+
 
 
         <div class="row">

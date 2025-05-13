@@ -7,18 +7,20 @@ var intervalStarted = false;
 var noteId;
 var localTitle = "";
 var localContents = "";
+var oldTitle = "";
+var localMode = "";
 
 $(document).ready(function () {
     // console.log('running')
-
-    getNoteContents();
+    setPreferences();
 
     $('#title').on('input', saveContent);
     $('#textareaElem').on('input', saveContent);
     $('#homeBtn').on('click', goHome);
     $('#AddLabelBtn').on('click', addLabel);
+    $('input:radio[name=mode]').on('click', changeMode)
 
-    //$('input:radio[name=mode]').on('click', changeMode)
+    getNoteContents();
 })
 
 function getNoteContents() {
@@ -32,7 +34,7 @@ function getNoteContents() {
             // console.log(response['contents'])
             // console.log(response['action']);
             // console.log(response['role'])
-            if (response['action'] == "CREATE") {
+            if (response['action'] === "Create") {
                 document.title = "Create Page"
             } else {
                 document.title = "Edit Page"
@@ -52,10 +54,10 @@ function getNoteContents() {
             // console.log(response['labels'])
             // showing the labels
             var labels = response['labels']
-            for (i = 0; i < labels.length; i++) {
+            for (var i = 0; i < labels.length; i++) {
                 var label = labels[i];
-                var labelElem = $(`<div class='d-inline border border-info rounded p-3 m-1'>#${label['Label']}</div>`)
-                var labelDeleteBtn = $(`<button class='btn btn-danger' data-id=${label['LabelID']}>&times;</button>`)
+                var labelElem = $(`<div class='d-inline border border-info rounded-pill p-2 m-1'><span>#${label['Label']} </span></div>`)
+                var labelDeleteBtn = $(`<button class='btn btn-danger btn-sm rounded-circle' data-id=${label['LabelID']}>&times;</button>`)
                 $(labelDeleteBtn).on('click', deleteLabel);
                 $(labelElem).append(labelDeleteBtn)
                 $('#labelDiv').append(labelElem)
@@ -66,6 +68,8 @@ function getNoteContents() {
         }
     }).fail(function () {
         alert("Could not connect to server")
+    }).always(() => {
+        //console.log('executing always')
     })
 }
 
@@ -121,7 +125,7 @@ function sendContent(OldTitle, NewTitle, Contents) {
         // try saving every one minute
         if (intervalStarted == false) {
             failInterval = window.setInterval(function () {
-                console.log('trying again')
+                // console.log('trying again')
                 sendContent(oldTitle, localTitle, localContents)
             }, 60000)
             intervalStarted = true
@@ -159,6 +163,7 @@ function setPreferences() {
         type: "GET",
         datatype: "json"
     }).done(function (response) {
+        console.log(response)
         if (response['code'] == 0) {
             if (response['Mode'] == 'DARK') {
                 $('.mode-target').addClass('bg-dark')
@@ -166,5 +171,7 @@ function setPreferences() {
                 $('.mode-target').addClass('bg-light')
             }
         }
+    }).fail(() => {
+
     })
 }
