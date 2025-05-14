@@ -27,7 +27,7 @@ if (empty($input->title)) {
 }
 
 $title = $input->title;
-$location = '../notes/' . $_SESSION['username'] . '/' . str_replace(" ", "", $title)  . '.txt';
+$location = '../notes/' . $_SESSION['username'] . '/' . str_replace(" ", "", $title) . '.txt';
 $result = file_exists($location);
 
 if ($result) {
@@ -42,7 +42,7 @@ if ($result) {
     $file = fopen($location, 'w');
     fclose($file);
     // add db entry
-    $res1 = create_note($_SESSION['username'], $_SESSION['userId'], $title);
+    $res = create_note($_SESSION['username'], $_SESSION['userId'], $title);
 
 
     if ($res == false) {

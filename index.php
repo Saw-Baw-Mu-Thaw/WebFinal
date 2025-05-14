@@ -1,10 +1,12 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION['username'])) {
     header('Location: login.php');
 }
 
+include 'api/unverified.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,11 +31,14 @@ if (!isset($_SESSION['username'])) {
             <div class="d-flex col-3 justify-content-end align-items-center">
                 <!-- Notifications dropdown -->
                 <div class="dropdown mr-2">
-                    <button class="btn btn-secondary position-relative" type="button" id="notificationsBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-secondary position-relative" type="button" id="notificationsBtn"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell"></i>
-                        <span id="notificationBadge" class="position-absolute badge badge-danger d-none" style="top: -5px; right: -5px;">0</span>
+                        <span id="notificationBadge" class="position-absolute badge badge-danger d-none"
+                            style="top: -5px; right: -5px;">0</span>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsBtn" style="width: 300px; max-height: 300px; overflow-y: auto;">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsBtn"
+                        style="width: 300px; max-height: 300px; overflow-y: auto;">
                         <h6 class="dropdown-header">Notifications</h6>
                         <div id="notificationsContainer">
                             <div class="text-center p-2" id="loadingNotifications">
@@ -76,7 +81,8 @@ if (!isset($_SESSION['username'])) {
                 </div>
             </div>
             <div class="d-flex col-2 p-3 justify-content-end">
-                <button class="btn btn-success" type="button" data-toggle='modal' data-target='#CreateNoteModal'><i class="fas fa-plus"></i></button>
+                <button class="btn btn-success" type="button" data-toggle='modal' data-target='#CreateNoteModal'><i
+                        class="fas fa-plus"></i></button>
 
                 <!-- create Note Modal -->
                 <div class="modal fade" id='CreateNoteModal' tabindex=-1>
@@ -84,7 +90,8 @@ if (!isset($_SESSION['username'])) {
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Create New Note</h5>
-                                <button type="button" class="close" data-dismiss="modal" onclick="(() => $('#createError').hide())">
+                                <button type="button" class="close" data-dismiss="modal"
+                                    onclick="(() => $('#createError').hide())">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -93,9 +100,11 @@ if (!isset($_SESSION['username'])) {
                                 <div class="container">
                                     <div class="col-12">
                                         <div class="input-group mb-3">
-                                            <input class="form-control" type="text" placeholder='Name here' id='txtTitle' maxlength="30" required />
+                                            <input class="form-control" type="text" placeholder='Name here'
+                                                id='txtTitle' maxlength="30" required />
                                             <div class="input-group-append">
-                                                <button class="btn btn-success mr-3" onclick='createNote()'>Create</button>
+                                                <button class="btn btn-success mr-3"
+                                                    onclick='createNote()'>Create</button>
                                             </div>
                                         </div>
                                     </div>
@@ -139,7 +148,8 @@ if (!isset($_SESSION['username'])) {
                                 <div class="input-group mb-3">
                                     <input class="form-control" type="text" id='notePwd' maxlength="30" required />
                                     <div class="input-group-append">
-                                        <button type="submit" id='pwdSubmitBtn' class="btn btn-success mr-3">Enter</button>
+                                        <button type="submit" id='pwdSubmitBtn'
+                                            class="btn btn-success mr-3">Enter</button>
                                     </div>
                                 </div>
                             </div>
