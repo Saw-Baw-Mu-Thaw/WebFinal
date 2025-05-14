@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["register"])) {
 
                 // Insert OTP into table
                 $stmt = $connect->prepare("INSERT INTO otp (UserID, Code, Type, ExpiresAt) VALUES (?, ?, ?, ?)");
-                $stmt->bind_param("iis", $user_id, $otp_code, $type, $Ex);
+                $stmt->bind_param("iiss", $user_id, $otp_code, $type, $expires_at);
                 $stmt->execute();
 
                 // Auto login the user
