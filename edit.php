@@ -18,6 +18,7 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Collaboration CSS will be loaded dynamically when needed -->
     <title>Edit</title>
 </head>
 
@@ -90,6 +91,7 @@ if (!isset($_SESSION['username'])) {
                                 <option value="VIEWER">View only</option>
                                 <option value="EDITOR">Can edit</option>
                             </select>
+                            <small class="form-text text-muted">Users with edit permission can collaborate in real-time.</small>
                         </div>
 
                         <button type="button" class="btn btn-primary" id="addShareBtn">Share</button>

@@ -1,0 +1,14 @@
+{
+    "name": "note-taking-app/web-final",
+    "description": "A note-taking web application with real-time collaboration",
+    "type": "project",
+    "require": {
+        "php": ">=7.2.0",
+        "cboden/ratchet": "^0.4.4"
+    },
+    "authors": [
+        {
+            "name": "WebFinal Team"
+        }
+    ]
+} 

@@ -1,0 +1,60 @@
+/* Collaboration-related styles */
+
+/* Cursor indicators */
+.cursor-indicator {
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.cursor-flag {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: white;
+    white-space: nowrap;
+}
+
+/* Collaboration panel */
+#collaborationPanel {
+    max-height: 150px;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+}
+
+#participantsList .list-group-item {
+    display: flex;
+    align-items: center;
+}
+
+#participantsList .badge {
+    margin-right: 10px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+/* Temporary notifications */
+.alert {
+    margin-top: 10px;
+    animation: fadein 0.5s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.fade.show {
+    opacity: 1;
+}
+
+.fade {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+} 

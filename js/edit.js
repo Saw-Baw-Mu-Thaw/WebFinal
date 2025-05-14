@@ -1,4 +1,5 @@
 import { changeMode } from "./mode.js";
+import collaboration from "./collaboration.js";
 
 var noteChanged = false;
 var timeout = null;
@@ -9,6 +10,9 @@ var localTitle = "";
 var localContents = "";
 var oldTitle = "";
 var localMode = "";
+var currentUserId = "";
+var currentUsername = "";
+var isCollaborationEnabled = false;
 
 $(document).ready(function () {
     // console.log('running')
@@ -50,6 +54,23 @@ function getNoteContents() {
             }
 
             noteId = response['NoteID'];
+            
+            // Get current user information
+            $.ajax({
+                url: "api/get_user_info.php",
+                type: "GET",
+                dataType: "json"
+            }).done(function(userInfo) {
+                if (userInfo.code === 0) {
+                    currentUserId = userInfo.userId;
+                    currentUsername = userInfo.username;
+                    
+                    // If this is a shared note with edit permissions, initialize collaboration
+                    if (response['role'] === 'EDITOR' && noteId) {
+                        initializeCollaboration();
+                    }
+                }
+            });
 
             // console.log(response['labels'])
             // showing the labels
@@ -73,6 +94,23 @@ function getNoteContents() {
     })
 }
 
+/**
+ * Initialize real-time collaboration
+ */
+function initializeCollaboration() {
+    if (!noteId || !currentUserId || !currentUsername) {
+        console.error('Missing required data for collaboration');
+        return;
+    }
+    
+    // Load collaboration CSS
+    $('head').append('<link rel="stylesheet" href="css/collaboration.css">');
+    
+    // Initialize collaboration module
+    collaboration.init(noteId, currentUserId, currentUsername);
+    isCollaborationEnabled = true;
+}
+
 function saveContent() {
     // console.log("Saving")
     // console.log("timeout : ", timeout)
@@ -80,7 +118,6 @@ function saveContent() {
         // console.log('cleared timeout')
         window.clearTimeout(timeout);
     }
-
 
     noteChanged = true;
     // console.log('noteChanged :', noteChanged);
@@ -90,7 +127,6 @@ function saveContent() {
     localContents = $('#textareaElem').val();
 
     timeout = window.setTimeout(function () { sendContent(oldTitle, newTitle, contents) }, 2000);
-
 }
 
 function sendContent(OldTitle, NewTitle, Contents) {
@@ -153,6 +189,11 @@ function showSaving() {
 }
 
 function goHome() {
+    // Disconnect from collaboration if enabled
+    if (isCollaborationEnabled) {
+        collaboration.disconnect();
+    }
+    
     location.replace("index.php");
 }
 
