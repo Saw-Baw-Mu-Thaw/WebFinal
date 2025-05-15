@@ -167,7 +167,7 @@ function sendContent(OldTitle, NewTitle, Contents) {
             failInterval = window.setInterval(function () {
                 // console.log('trying again')
                 sendContent(oldTitle, localTitle, localContents)
-            }, 60000)
+            }, 10000)
             intervalStarted = true
         }
 

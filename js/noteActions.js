@@ -53,7 +53,7 @@ function sendPwd(e) {
     var noteId = $(e.target).data('id')
     var Password = $('#notePwd').val();
 
-    console.log('sending password : ', Password, noteId);
+    // console.log('sending password : ', Password, noteId);
 
     // send ajax
     $.ajax({
@@ -151,18 +151,42 @@ function setPassword(e) {
 }
 
 function removeLock(noteId) {
-    console.log("NOte ID : " + noteId)
+    // console.log("NOte ID : " + noteId)
 
-    // send ajax
+    $(".modal-title").text("Enter password")
+    $("#pwdSubmitBtn").data('id', noteId);
+    $("#pwdSubmitBtn").on('click', sendPwdforRemove)
+    $("#passwordModal").modal('show')
+
+}
+
+function sendPwdforRemove(e) {
+    var noteId = $(e.target).data('id')
+    var Password = $('#notePwd').val();
+
     $.ajax({
-        url: 'api/remove_lock.php?id=' + noteId,
-        type: 'DELETE',
-        datatype: "json"
+        url: 'api/open_locked_note.php',
+        type: "POST",
+        datatype: "json",
+        contenttype: 'application/json',
+        data: JSON.stringify({ id: noteId, password: Password })
     }).done(function (response) {
         if (response['code'] == 0) {
-            location.reload();
-        }
-        else {
+
+            // send ajax
+            $.ajax({
+                url: 'api/remove_lock.php?id=' + noteId,
+                type: 'DELETE',
+                datatype: "json"
+            }).done(function (response) {
+                if (response['code'] == 0) {
+                    location.reload();
+                }
+                else {
+                    showError(response['message'])
+                }
+            })
+        } else {
             showError(response['message'])
         }
     })
@@ -241,6 +265,7 @@ function sendNewPassword(e) {
                 $('#pwdChangeError').hide()
                 $('#pwdChangeError').removeClass('alert-success')
                 $('#pwdChangeError').addClass('alert-danger')
+                $('#changePwdModal').modal('toggle')
             }, 500)
 
             window.setTimeout(function () { $("#pwdChangeError").hide() }, 2500)
@@ -250,7 +275,7 @@ function sendNewPassword(e) {
             window.setTimeout(() => {
                 $('#pwdChangeError').hide()
             }, 1000)
-            $('#changePwdModal').modal('hide')
+
         }
     })
 }
