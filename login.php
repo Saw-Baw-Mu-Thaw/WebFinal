@@ -43,6 +43,10 @@ if (isset($_SESSION['username'])) {
                         <p>Don't have an account? <a href="registration_form.php">Register here</a></p>
                     </div>
 
+                    <div class=" mt-3 text-right">
+                        <a href="forget_password_form.php"> Forget Password?</a>
+                    </div>
+
                     <div id="errorDiv" class="alert alert-danger text-center"></div>
 
                     <button type="submit" class="btn btn-success">Login</button>

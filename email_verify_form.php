@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-require_once 'config.php';
-
 
 if (isset($_GET['uid'])) {
     $_SESSION['userId'] = (int) $_GET['uid'];
@@ -21,7 +19,7 @@ if (isset($_GET['uid'])) {
 
     <?php if (isset($_SESSION['error'])): ?>
         <p style="color: red;"><?php echo $_SESSION['error'];
-                                unset($_SESSION['error']); ?>
+        unset($_SESSION['error']); ?>
         </p>
     <?php endif; ?>
 
