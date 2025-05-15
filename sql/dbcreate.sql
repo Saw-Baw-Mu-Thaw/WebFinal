@@ -3,9 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2025 at 06:14 PM
+
+-- Generation Time: May 15, 2025 at 02:41 AM
+
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -81,6 +83,7 @@ INSERT INTO `notes` (`NoteID`, `Title`, `Location`, `UserID`, `ModifiedDate`, `A
 -- --------------------------------------------------------
 
 --
+
 -- Table structure for table `notifications`
 --
 
@@ -95,7 +98,23 @@ CREATE TABLE `notifications` (
 
 -- --------------------------------------------------------
 
+
+-- Table structure for table `otp`
 --
+
+CREATE TABLE `otp` (
+  `OtpID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `Code` int(11) NOT NULL,
+  `Type` enum('activation','password_reset') NOT NULL,
+  `ExpiresAt` datetime NOT NULL,
+  `IsUsed` tinyint(1) DEFAULT 0,
+  `CreatedAt` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+
 -- Table structure for table `pinnednotes`
 --
 
@@ -206,6 +225,7 @@ ALTER TABLE `notes`
   ADD KEY `UserID` (`UserID`);
 
 --
+
 -- Indexes for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -214,6 +234,14 @@ ALTER TABLE `notifications`
   ADD KEY `NoteID` (`NoteID`);
 
 --
+
+-- Indexes for table `otp`
+--
+ALTER TABLE `otp`
+  ADD PRIMARY KEY (`OtpID`),
+  ADD KEY `UserID` (`UserID`);
+
+
 -- Indexes for table `pinnednotes`
 --
 ALTER TABLE `pinnednotes`
@@ -258,12 +286,20 @@ ALTER TABLE `notes`
   MODIFY `NoteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
   MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+
+-- AUTO_INCREMENT for table `otp`
+--
+ALTER TABLE `otp`
+  MODIFY `OtpID` int(11) NOT NULL AUTO_INCREMENT;
+
+
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -300,6 +336,12 @@ ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`NoteID`) REFERENCES `notes` (`NoteID`);
 
 --
+
+-- Constraints for table `otp`
+--
+ALTER TABLE `otp`
+  ADD CONSTRAINT `otp_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE;
+
 -- Constraints for table `pinnednotes`
 --
 ALTER TABLE `pinnednotes`

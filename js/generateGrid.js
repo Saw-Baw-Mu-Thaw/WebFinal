@@ -1,4 +1,5 @@
 import { formatDatetime } from "./utils.js";
+import { removeAtchImg } from "./removeAttachedImg.js";
 
 function generateGrid(obj) {
 
@@ -7,17 +8,21 @@ function generateGrid(obj) {
     var cardBody = $("<div class='card-body'></div>");
     var cardTitle = $("<h5 class='card-title'></h5>").text(obj['Title']);
     var cardText = $("<p class='card-text'></p>").html("Last Modified : " + formatDatetime(obj['LastModified']));
-    var openBtn = $(`<button class='btn btn-primary mx-1' onclick='openNote(${obj['NoteID']}, ${obj['Locked']})'>Open</button>`);
-    var delBtn = $(`<button class='btn btn-danger mx-1'  onclick='deleteNote(${obj['NoteID']}, "${obj['Title']}")'>Delete</button>`);
+    var openBtn = $(`<button class='btn btn-primary mx-1' onclick='openNote(${obj['NoteID']}, ${obj['Locked']})'><i class="far fa-edit"></i></button>`);
+    var delBtn = $(`<button class='btn btn-danger mx-1'  onclick='deleteNote(${obj['NoteID']}, "${obj['Title']}")'><i class="fas fa-trash"></i></button>`);
     var lockBtn;
+
     if (obj['Locked'] == false) {
-        // console.log('set lock btn')
+        // setting lock button and icon
         lockBtn = $(`<button class='btn btn-info mx-1' onclick='lockNote(${obj['NoteID']})'>Lock Note</button>`)
+        $(cardTitle).append('<span class="mx-1"><i class="fas fa-lock-open"></i></span>')
     } else {
-        // console.log('set unlock btn')
+        // setting remove lock button and icon
         lockBtn = $(`<button class='btn btn-info mx-1' onclick='removeLock(${obj['NoteID']})'>Remove Lock</button>`)
+        $(cardTitle).append('<span class="mx-1"><i class="fas fa-lock"></i></span>')
     }
 
+    // attached Image button
     if (obj['AttachedImg'] != null) {
         var attachedImg = $(`<img class='card-img-top' src='${obj['AttachedImg']}' />`)
 
@@ -43,17 +48,19 @@ function generateGrid(obj) {
         $(card).append(attachedImg);
     }
 
+    // pin button
     var pinBtn;
     if (obj['Pinned'] == true) {
-        pinBtn = $(`<button class='btn btn-primary' onclick='removePin(${obj['NoteID']})'>
+        pinBtn = $(`<button class='btn mx-1' onclick='removePin(${obj['NoteID']})'>
                 <span style='color:red;'><i class="fas fa-thumbtack"></i></span>
                 </button>`)
     } else {
-        pinBtn = $(`<button class='btn btn-primary mx-1' onclick='addPin(${obj['NoteID']})'>
+        pinBtn = $(`<button class='btn mx-1' onclick='addPin(${obj['NoteID']})'>
             <span style='color:blue;'><i class="fas fa-thumbtack"></i></span>
             </button>`)
     }
 
+    // code for labels
     $(cardText).append("<hr>")
     var labelString = ""
     var labelList = obj['Labels']
@@ -67,11 +74,22 @@ function generateGrid(obj) {
     $(cardText).append(labelp)
     $(cardText).append("<hr>")
 
+
+    // appending elements
     $(cardTitle).prepend(pinBtn);
-    if (obj['SharedNote'] == true) {
+    if (obj['SharedNote'] == true) { // shared notes can't be deleted by non-owner
         $(cardBody).append(cardTitle, cardText, openBtn);
     } else {
         $(cardBody).append(cardTitle, cardText, openBtn, delBtn, lockBtn);
+
+        // add button to revert attached image back to default
+        if (obj['AttachedImg'] != null) {
+            var removeAttachedImgBtn = $("<button class='btn btn-danger mx-1'><i class='fas fa-image'></i></button>")
+            $(removeAttachedImgBtn).attr('data-id', obj['NoteID'])
+            $(removeAttachedImgBtn).attr('data-loc', obj['AttachedImg'])
+            $(removeAttachedImgBtn).on('click', removeAtchImg)
+            $(cardBody).append(removeAttachedImgBtn)
+        }
     }
     $(card).append(cardBody);
     $("#mainContent").append(card);

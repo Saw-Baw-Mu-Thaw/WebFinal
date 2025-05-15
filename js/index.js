@@ -2,6 +2,7 @@ import { changeMode } from "./mode.js";
 import { changeLayout } from "./layout.js";
 import { generateGrid } from "./generateGrid.js";
 import { generateList } from "./generateList.js";
+import {searchNote} from "./search.js";										 
 
 function getNotesGrid() {
   $.ajax({
@@ -18,15 +19,32 @@ function getNotesGrid() {
   });
 }
 
+function getNotesGrid() {
+  $.ajax({
+    url: "api/get_notes.php",
+    type: "GET",
+    datatype: "json",
+  }).done(function (response) {
+    // console.log(response);
+	localStorage.setItem('notes', JSON.stringify(response))
+    for (var i = 0; i < response.length; i++) {
+      // console.log(response[i]);
+      generateGrid(response[i]);
+    }
+  });
+}
+
 function getNotesList() {
   $.ajax({
     url: "api/get_notes.php",
     type: "GET",
     datatype: "json",
   }).done(function (response) {
-    console.log(response);
+    // console.log(response);
+		localStorage.setItem('notes', JSON.stringify(response))										   
     generateList(response);
   });
+
 }
 
 function setPreferences(elemList) {
@@ -114,5 +132,8 @@ $(document).ready(function () {
   // use display block to show it
   setUsernameHeading();
   // getNotes();
-  setPreferences(["body", "div", "h4", "h5"]);
+  setPreferences(["body", "div", "h4", "h5"]);											
+											
+	$('#txtSearch').on('input', searchNote);								
 });
+

@@ -639,3 +639,16 @@ function attach_img($noteId, $location)
     mysqli_close($conn);
     return $res;
 }
+
+function unattach_note_img($noteId)
+{
+    $conn = get_conn();
+
+    $query = "Update Notes Set AttachedImg = NULL Where NoteID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'i', $noteId);
+    $res = mysqli_execute($stmt);
+    mysqli_close($conn);
+    return $res;
+}
+

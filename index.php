@@ -185,6 +185,19 @@ include 'api/unverified.php';
         </div>
 
         <div class="row m-2">
+            <div class='input-group'>
+                <div class='input-group-prepend'>
+                    <span class='input-group-text'> Search </span>
+                </div>
+                <input type='text' class="form-control" id='txtSearch' placeholder="Use # to search for labels e.g. #potato" />
+            </div>
+
+            <div class='list-group col-12' id='searchList'>
+
+            </div>
+        </div>
+
+        <div class="row m-2">									 
             <h3 id='errorDiv' class="alert alert-danger col-12 text-center p-3">
 
             </h3>

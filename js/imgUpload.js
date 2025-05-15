@@ -52,8 +52,17 @@ function changeImg(filename, file, noteId) {
         if (response['code'] == 0) {
             console.log('success')
             location.reload();
+        } else {
+            showError(response['message'])
         }
-    }).fail(() => {
-        alert('Could not connect to server')
+    }).fail((response) => {
+        showError(response['message'])
     })
+}
+
+function showError(msg) {
+    $("#errorDiv").show();
+    $("#errorDiv").text(msg);
+
+    window.setTimeout(function () { $("#errorDiv").hide() }, 2500)
 }

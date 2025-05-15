@@ -1,9 +1,11 @@
 <?php return array(
     'root' => array(
         'name' => 'note-taking-app/web-final',
+
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
         'reference' => '3c59347cf05dc4b3cb8c531a01b74d151541cc01',
+
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -38,9 +40,11 @@
             'dev_requirement' => false,
         ),
         'note-taking-app/web-final' => array(
+
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
             'reference' => '3c59347cf05dc4b3cb8c531a01b74d151541cc01',
+
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
