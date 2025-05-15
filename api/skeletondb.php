@@ -115,10 +115,6 @@ function delete_note($noteID)
 {
     $conn = get_conn();
 
-    $statement = mysqli_prepare($conn, "Delete From Notes where NoteID = ?");
-    mysqli_stmt_bind_param($statement, "i", $noteID);
-    $res1 = mysqli_stmt_execute($statement);
-
     $statement = mysqli_prepare($conn, "delete from LockedNotes where NoteID = ?");
     mysqli_stmt_bind_param($statement, "i", $noteID);
     $res2 = mysqli_stmt_execute($statement);
@@ -127,7 +123,28 @@ function delete_note($noteID)
     mysqli_stmt_bind_param($statement, "i", $noteID);
     $res3 = mysqli_stmt_execute($statement);
 
-    return $res1 && $res2 && $res3;
+    $query = "Delete From PinnedNotes Where NoteID = ?";
+    $statement = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($statement, 'i', $noteID);
+    $res4 = mysqli_execute($statement);
+
+    $query = "Delete From Labels Where NoteID = ?";
+    $statement = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($statement, 'i', $noteID);
+    $res5 = mysqli_execute($statement);
+
+    $query = "Delete From Notifications Where NoteID = ?";
+    $statement = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($statement, 'i', $noteID);
+    $res6 = mysqli_execute($statement);
+
+    $statement = mysqli_prepare($conn, "Delete From Notes where NoteID = ?");
+    mysqli_stmt_bind_param($statement, "i", $noteID);
+    $res1 = mysqli_stmt_execute($statement);
+
+    mysqli_close($conn);
+
+    return $res1 && $res2 && $res3 && $res4 && $res5 && $res6;
 }
 
 
@@ -349,8 +366,6 @@ function get_labels($userId, $noteId)
     mysqli_close($conn);
     return $rows;
 }
-<<<<<<< Updated upstream
-=======
 
 
 /**
@@ -636,4 +651,4 @@ function unattach_note_img($noteId)
     mysqli_close($conn);
     return $res;
 }
->>>>>>> Stashed changes
+

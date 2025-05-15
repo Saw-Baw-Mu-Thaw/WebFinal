@@ -1,3 +1,6 @@
+import { changeMode } from "./mode.js";
+import collaboration from "./collaboration.js";
+
 var noteChanged = false;
 var timeout = null;
 var failInterval = null;
@@ -5,18 +8,23 @@ var intervalStarted = false;
 var noteId;
 var localTitle = "";
 var localContents = "";
+var oldTitle = "";
+var localMode = "";
+var currentUserId = "";
+var currentUsername = "";
+var isCollaborationEnabled = false;
 
 $(document).ready(function () {
     // console.log('running')
-
-    getNoteContents();
+    setPreferences();
 
     $('#title').on('input', saveContent);
     $('#textareaElem').on('input', saveContent);
     $('#homeBtn').on('click', goHome);
-    $('#User1').on('click', shareNote);
     $('#AddLabelBtn').on('click', addLabel);
+    $('input:radio[name=mode]').on('click', changeMode)
 
+    getNoteContents();
 })
 
 function getNoteContents() {
@@ -30,7 +38,7 @@ function getNoteContents() {
             // console.log(response['contents'])
             // console.log(response['action']);
             // console.log(response['role'])
-            if (response['action'] == "CREATE") {
+            if (response['action'] === "Create") {
                 document.title = "Create Page"
             } else {
                 document.title = "Edit Page"
@@ -46,23 +54,61 @@ function getNoteContents() {
             }
 
             noteId = response['NoteID'];
+            
+            // Get current user information
+            $.ajax({
+                url: "api/get_user_info.php",
+                type: "GET",
+                dataType: "json"
+            }).done(function(userInfo) {
+                if (userInfo.code === 0) {
+                    currentUserId = userInfo.userId;
+                    currentUsername = userInfo.username;
+                    
+                    // If this is a shared note with edit permissions, initialize collaboration
+                    if (response['role'] === 'EDITOR' && noteId) {
+                        initializeCollaboration();
+                    }
+                }
+            });
 
             // console.log(response['labels'])
             // showing the labels
             var labels = response['labels']
-            for (i = 0; i < labels.length; i++) {
+            for (var i = 0; i < labels.length; i++) {
                 var label = labels[i];
-                var labelElem = $(`<div class='d-inline border border-info rounded p-1'>#${label['Label']}</div>`)
-                var labelDeleteBtn = $(`<button class='d-inline btn btn-danger' data-id=${label['LabelID']}>&times;</button>`)
+                var labelElem = $(`<div class='d-inline border border-info rounded-pill p-2 m-1'><span>#${label['Label']} </span></div>`)
+                var labelDeleteBtn = $(`<button class='btn btn-danger btn-sm rounded-circle' data-id=${label['LabelID']}>&times;</button>`)
                 $(labelDeleteBtn).on('click', deleteLabel);
                 $(labelElem).append(labelDeleteBtn)
                 $('#labelDiv').append(labelElem)
             }
             showSaved()
+
+            //setPreferences();
         }
     }).fail(function () {
         alert("Could not connect to server")
+    }).always(() => {
+        //console.log('executing always')
     })
+}
+
+/**
+ * Initialize real-time collaboration
+ */
+function initializeCollaboration() {
+    if (!noteId || !currentUserId || !currentUsername) {
+        console.error('Missing required data for collaboration');
+        return;
+    }
+    
+    // Load collaboration CSS
+    $('head').append('<link rel="stylesheet" href="css/collaboration.css">');
+    
+    // Initialize collaboration module
+    collaboration.init(noteId, currentUserId, currentUsername);
+    isCollaborationEnabled = true;
 }
 
 function saveContent() {
@@ -73,7 +119,6 @@ function saveContent() {
         window.clearTimeout(timeout);
     }
 
-
     noteChanged = true;
     // console.log('noteChanged :', noteChanged);
     var newTitle = $('#title').val();
@@ -82,7 +127,6 @@ function saveContent() {
     localContents = $('#textareaElem').val();
 
     timeout = window.setTimeout(function () { sendContent(oldTitle, newTitle, contents) }, 2000);
-
 }
 
 function sendContent(OldTitle, NewTitle, Contents) {
@@ -117,7 +161,7 @@ function sendContent(OldTitle, NewTitle, Contents) {
         // try saving every one minute
         if (intervalStarted == false) {
             failInterval = window.setInterval(function () {
-                console.log('trying again')
+                // console.log('trying again')
                 sendContent(oldTitle, localTitle, localContents)
             }, 60000)
             intervalStarted = true
@@ -145,10 +189,30 @@ function showSaving() {
 }
 
 function goHome() {
+    // Disconnect from collaboration if enabled
+    if (isCollaborationEnabled) {
+        collaboration.disconnect();
+    }
+    
     location.replace("index.php");
 }
 
-function shareNote(e) {
-    userId = $(e.target).data('id')
-    console.log('clicked user ' + userId);
+// set light mode or dark mode
+function setPreferences() {
+    $.ajax({
+        url: 'api/get_preferences.php',
+        type: "GET",
+        datatype: "json"
+    }).done(function (response) {
+        console.log(response)
+        if (response['code'] == 0) {
+            if (response['Mode'] == 'DARK') {
+                $('.mode-target').addClass('bg-dark')
+            } else {
+                $('.mode-target').addClass('bg-light')
+            }
+        }
+    }).fail(() => {
+
+    })
 }

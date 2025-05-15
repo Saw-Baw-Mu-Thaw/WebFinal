@@ -32,6 +32,7 @@ function changeLayout(e) {
 
         // set light mode and dark mode
         // store mode in local storage
+
     })
 }
 

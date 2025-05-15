@@ -3,11 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-<<<<<<< Updated upstream
--- Generation Time: May 11, 2025 at 05:25 PM
-=======
+
 -- Generation Time: May 15, 2025 at 02:41 AM
->>>>>>> Stashed changes
+
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -85,8 +83,7 @@ INSERT INTO `notes` (`NoteID`, `Title`, `Location`, `UserID`, `ModifiedDate`, `A
 -- --------------------------------------------------------
 
 --
-<<<<<<< Updated upstream
-=======
+
 -- Table structure for table `notifications`
 --
 
@@ -101,7 +98,7 @@ CREATE TABLE `notifications` (
 
 -- --------------------------------------------------------
 
---
+
 -- Table structure for table `otp`
 --
 
@@ -117,8 +114,7 @@ CREATE TABLE `otp` (
 
 -- --------------------------------------------------------
 
---
->>>>>>> Stashed changes
+
 -- Table structure for table `pinnednotes`
 --
 
@@ -229,8 +225,7 @@ ALTER TABLE `notes`
   ADD KEY `UserID` (`UserID`);
 
 --
-<<<<<<< Updated upstream
-=======
+
 -- Indexes for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -239,14 +234,14 @@ ALTER TABLE `notifications`
   ADD KEY `NoteID` (`NoteID`);
 
 --
+
 -- Indexes for table `otp`
 --
 ALTER TABLE `otp`
   ADD PRIMARY KEY (`OtpID`),
   ADD KEY `UserID` (`UserID`);
 
---
->>>>>>> Stashed changes
+
 -- Indexes for table `pinnednotes`
 --
 ALTER TABLE `pinnednotes`
@@ -291,21 +286,20 @@ ALTER TABLE `notes`
   MODIFY `NoteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
-<<<<<<< Updated upstream
-=======
+
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
   MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+
 -- AUTO_INCREMENT for table `otp`
 --
 ALTER TABLE `otp`
   MODIFY `OtpID` int(11) NOT NULL AUTO_INCREMENT;
 
---
->>>>>>> Stashed changes
+
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -335,8 +329,6 @@ ALTER TABLE `notes`
   ADD CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
 
 --
-<<<<<<< Updated upstream
-=======
 -- Constraints for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -344,13 +336,12 @@ ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`NoteID`) REFERENCES `notes` (`NoteID`);
 
 --
+
 -- Constraints for table `otp`
 --
 ALTER TABLE `otp`
   ADD CONSTRAINT `otp_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE;
 
---
->>>>>>> Stashed changes
 -- Constraints for table `pinnednotes`
 --
 ALTER TABLE `pinnednotes`

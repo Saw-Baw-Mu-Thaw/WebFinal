@@ -15,13 +15,21 @@ if (!isset($_GET['noteId']) && !isset($_GET['title'])) {
     die(json_encode(array('code' => 1, 'message' => 'Missing Information')));
 }
 
-$id = intval($_GET['noteId']);
+$noteId = intval($_GET['noteId']);
 $title = $_GET['title'];
+$location = get_location($noteId);
+
+if (!is_note_owner($_SESSION['userId'], $noteId)) {
+    die(json_encode(array('code' => 6, 'message' => 'You are not the owner of this note')));
+}
 // delete file
-$res1 = unlink('../notes/' . $_SESSION['username'] . '/' . $title . '.txt');
+$res1 = unlink($location);
 
 // delete db entries
-$res2 = delete_note($id);
+// due to foreign keys, must delete from
+// locked notes table, pinned notes table, shared notes table
+// and then notes table.
+$res2 = delete_note($noteId);
 
 if (!$res1 || !$res2) {
     die(json_encode(array('code' => 2, 'message' => 'Could not delete note')));

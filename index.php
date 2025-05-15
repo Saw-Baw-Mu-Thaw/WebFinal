@@ -1,10 +1,12 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION['username'])) {
     header('Location: login.php');
 }
 
+include 'api/unverified.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,23 +22,67 @@ if (!isset($_SESSION['username'])) {
     <title>Index</title>
 </head>
 
-<body class="">
-    <div class="container">
-        <div class="row">
+<body class="mode-target">
+    <div class="container mode-target">
+        <div class="row mode-target">
             <div class="col-3 mr-auto p-3 text-center">
                 <img class="img-fluid" src="images/Skeleton.png" alt="SkeleLogo" />
             </div>
             <div class="d-flex col-3 justify-content-end align-items-center">
+                <!-- Notifications dropdown -->
+                <div class="dropdown mr-2">
+                    <button class="btn btn-secondary position-relative" type="button" id="notificationsBtn"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span id="notificationBadge" class="position-absolute badge badge-danger d-none"
+                            style="top: -5px; right: -5px;">0</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationsBtn"
+                        style="width: 300px; max-height: 300px; overflow-y: auto;">
+                        <h6 class="dropdown-header">Notifications</h6>
+                        <div id="notificationsContainer">
+                            <div class="text-center p-2" id="loadingNotifications">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-item text-center text-muted d-none" id="noNotificationsMsg">
+                                No notifications
+                            </div>
+                            <!-- Notifications will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
                 <button class="btn btn-secondary" onclick="Logout()">Logout</button>
             </div>
         </div>
 
-        <div class="row border">
-            <div class="col-8 p-3">
+        <div class="row border mode-target">
+            <div class="col-6 p-3">
                 <h3 id='userHeading'></h3>
             </div>
-            <div class="d-flex col-4 p-3 justify-content-end">
-                <button class="btn btn-success" type="button" data-toggle='modal' data-target='#CreateNoteModal'><i class="fas fa-plus"></i></button>
+            <div class="col-4 p-3">
+                <div class='btn-group btn-group-toggle border rounded m-1' data-toggle="button">
+                    <label class="btn btn-light">
+                        <input type="radio" name="mode" value='LIGHT'> <i class="far fa-sun"></i>
+                    </label>
+                    <label class="btn btn-dark">
+                        <input type='radio' name='mode' value='DARK'> <i class="far fa-moon"></i>
+                    </label>
+                </div>
+
+                <div class='btn-group btn-group-toggle border rounded m-1' data-toggle="button">
+                    <label class="btn btn-light">
+                        <input type="radio" name="layout" value='GRID'> <i class="fas fa-th-large"></i>
+                    </label>
+                    <label class="btn btn-light">
+                        <input type='radio' name='layout' value='LIST'> <i class="fas fa-list-ul"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="d-flex col-2 p-3 justify-content-end">
+                <button class="btn btn-success" type="button" data-toggle='modal' data-target='#CreateNoteModal'><i
+                        class="fas fa-plus"></i></button>
 
                 <!-- create Note Modal -->
                 <div class="modal fade" id='CreateNoteModal' tabindex=-1>
@@ -44,7 +90,8 @@ if (!isset($_SESSION['username'])) {
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Create New Note</h5>
-                                <button type="button" class="close" data-dismiss="modal" onclick="(() => $('#createError').hide())">
+                                <button type="button" class="close" data-dismiss="modal"
+                                    onclick="(() => $('#createError').hide())">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -53,9 +100,11 @@ if (!isset($_SESSION['username'])) {
                                 <div class="container">
                                     <div class="col-12">
                                         <div class="input-group mb-3">
-                                            <input class="form-control" type="text" placeholder='Name here' id='txtTitle' maxlength="30" required />
+                                            <input class="form-control" type="text" placeholder='Name here'
+                                                id='txtTitle' maxlength="30" required />
                                             <div class="input-group-append">
-                                                <button class="btn btn-success mr-3" onclick='createNote()'>Create</button>
+                                                <button class="btn btn-success mr-3"
+                                                    onclick='createNote()'>Create</button>
                                             </div>
                                         </div>
                                     </div>
@@ -99,7 +148,8 @@ if (!isset($_SESSION['username'])) {
                                 <div class="input-group mb-3">
                                     <input class="form-control" type="text" id='notePwd' maxlength="30" required />
                                     <div class="input-group-append">
-                                        <button type="submit" id='pwdSubmitBtn' class="btn btn-success mr-3">Enter</button>
+                                        <button type="submit" id='pwdSubmitBtn'
+                                            class="btn btn-success mr-3">Enter</button>
                                     </div>
                                 </div>
                             </div>
@@ -153,7 +203,7 @@ if (!isset($_SESSION['username'])) {
             </h3>
         </div>
 
-        <div id='mainContent' class="row m-3">
+        <div id='mainContent' class="row m-3 mode-target">
             <!-- list or grid goes here, generated by js -->
         </div>
     </div>
@@ -164,8 +214,10 @@ if (!isset($_SESSION['username'])) {
     <script src="./js/noteActions.js"></script>
     <script src="./js/pinActions.js"></script>
     <script type='module' src="./js/index.js"></script>
+    <script type="module" src='./js/utils.js'></script>
     <script src="./js/logout.js"></script>
-
+    <script src='./js/notifications.js'></script>
+    <script src='./js/imgUpload.js'></script>
     <!--  -->
 </body>
 

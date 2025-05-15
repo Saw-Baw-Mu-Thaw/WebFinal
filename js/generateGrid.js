@@ -4,7 +4,7 @@ import { removeAtchImg } from "./removeAttachedImg.js";
 function generateGrid(obj) {
 
     // create a row of cards
-    var card = $("<div class='card col-lg-4 col-12 m-1'></div>");
+    var card = $("<div class='card col-lg-4 col-12 m-1 mode-target'></div>");
     var cardBody = $("<div class='card-body'></div>");
     var cardTitle = $("<h5 class='card-title'></h5>").text(obj['Title']);
     var cardText = $("<p class='card-text'></p>").html("Last Modified : " + formatDatetime(obj['LastModified']));
@@ -25,10 +25,26 @@ function generateGrid(obj) {
     // attached Image button
     if (obj['AttachedImg'] != null) {
         var attachedImg = $(`<img class='card-img-top' src='${obj['AttachedImg']}' />`)
+
+        if (obj['SharedNote'] == false) {
+            $(attachedImg).on('drop', imgDropHandler)
+            $(attachedImg).on('dragover', imgDragOverHandler)
+            $(attachedImg).on('dragenter', imgDragEnter)
+            $(attachedImg).on('dragleave', imgDragLeave)
+            $(attachedImg).attr('data-id', obj['NoteID'])
+        }
         $(card).append(attachedImg);
+
     } else {
         // you can replace the default_image, probably something smaller
         var attachedImg = $("<img class='card-img-top' src='images/default_image.png' />")
+        if (obj['SharedNote'] == false) {
+            $(attachedImg).on('drop', imgDropHandler)
+            $(attachedImg).on('dragover', imgDragOverHandler)
+            $(attachedImg).on('dragenter', imgDragEnter)
+            $(attachedImg).on('dragleave', imgDragLeave)
+            $(attachedImg).attr('data-id', obj['NoteID'])
+        }
         $(card).append(attachedImg);
     }
 
@@ -44,8 +60,6 @@ function generateGrid(obj) {
             </button>`)
     }
 
-<<<<<<< Updated upstream
-=======
     // code for labels
     $(cardText).append("<hr>")
     var labelString = ""
@@ -60,8 +74,8 @@ function generateGrid(obj) {
     $(cardText).append(labelp)
     $(cardText).append("<hr>")
 
+
     // appending elements
->>>>>>> Stashed changes
     $(cardTitle).prepend(pinBtn);
     if (obj['SharedNote'] == true) { // shared notes can't be deleted by non-owner
         $(cardBody).append(cardTitle, cardText, openBtn);
