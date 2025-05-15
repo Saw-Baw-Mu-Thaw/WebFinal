@@ -26,20 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["register"])) {
     // Validate user input
     if (empty($user_name)) {
         $error_user_name = "Please enter your name.";
-    }
-
-    if (empty($user_email) || !filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+    } else if (empty($user_email) || !filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
         $error_user_email = "Please enter a valid email.";
-    }
-
-    if (empty($user_password)) {
+    } else if (empty($user_password)) {
         $error_user_password = "Please enter your password.";
-    }
-
-    if ($user_password !== $user_password_confirm) {
+    } else if ($user_password !== $user_password_confirm) {
         $error_user_password_confirm = "Passwords do not match.";
+    } else if (strlen($user_password) < 8) {
+        $error_user_password = "Must be at least 8 characters";
+    } else if (preg_match('/[0-9]/', $user_password) == 0) {
+        $error_user_password = "Passwords must contain at least one digit (0-9)";
+    } else if (preg_match('/[A-Z]/', $user_password) == 0) {
+        $error_user_password = "Passwords must contain one capital letter";
+    } else if (preg_match('/[^a-zA-Z0-9]/', $user_password) == 0) {
+        $error_user_password = "Passwords must contain at least one special character";
     }
-
 
     if ($error_user_name === '' && $error_user_email === '' && $error_user_password === '' && $error_user_password_confirm === '') {
 
@@ -114,7 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["register"])) {
                     // Redirect to home or dashboard
                     header("Location: index.php?uid=$user_id");
                     exit();
-
                 } catch (Exception $e) {
                     $message = '<label class="text-danger">Mailer Error: ' . $mail->ErrorInfo . '</label>';
                 }
@@ -122,6 +122,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["register"])) {
                 $message = '<label class="text-danger">Registration failed. Please try again.</label>';
             }
         }
+    } else {
+        if (!empty($error_user_name)) {
+            $message = '<label class="text-danger">' . $error_user_name . '</label>';
+        } else if (!empty($error_user_email)) {
+            $message = '<label class="text-danger">' . $error_user_email . '</label>';
+        } else if (!empty($error_user_password)) {
+            $message = '<label class="text-danger">' . $error_user_password . '</label>';
+        } else {
+            $message = '<label class="text-danger">' . $error_user_password_confirm . '</label>';
+        }
     }
 }
-?>
