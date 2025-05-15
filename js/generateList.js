@@ -18,8 +18,8 @@ function generateList(response) {
         var title = $(`<td>${obj['Title']}</td>`)
         var lastModified = $(`<td>${formatDatetime(obj['LastModified'])}</td>`)
         var actionCell = $("<td></td>");
-        var openBtn = $(`<button class='btn btn-primary mx-1' onclick='openNote(${obj['NoteID']}, ${obj['Locked']})'>Open</button>`);
-        var delBtn = $(`<button class='btn btn-danger mx-1'  onclick='deleteNote(${obj['NoteID']}, "${obj['Title']}")'>Delete</button>`);
+        var openBtn = $(`<button class='btn btn-primary mx-1' onclick='openNote(${obj['NoteID']}, ${obj['Locked']})'><i class="far fa-edit"></i></button>`);
+        var delBtn = $(`<button class='btn btn-danger mx-1'  onclick='deleteNote(${obj['NoteID']}, "${obj['Title']}")'><i class="fas fa-trash"></i></button>`);
         var lockBtn;
         if (obj['Locked'] == false) {
             lockBtn = $(`<button class='btn btn-info mx-1' onclick='lockNote(${obj['NoteID']})'>Lock Note</button>`)
@@ -30,11 +30,11 @@ function generateList(response) {
         var pinCell = $("<td></td>");
         var pinBtn;
         if (obj['Pinned'] == true) {
-            pinBtn = $(`<button class='btn btn-primary' onclick='removePin(${obj['NoteID']})'>
+            pinBtn = $(`<button class='btn' onclick='removePin(${obj['NoteID']})'>
                 <span style='color:red;'><i class="fas fa-thumbtack"></i></span>
                 </button>`)
         } else {
-            pinBtn = $(`<button class='btn btn-primary' onclick='addPin(${obj['NoteID']})'>
+            pinBtn = $(`<button class='btn' onclick='addPin(${obj['NoteID']})'>
                 <span style='color:blue;'><i class="fas fa-thumbtack"></i></span>
                 </button>`)
         }

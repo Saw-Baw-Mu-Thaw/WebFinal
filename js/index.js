@@ -1,6 +1,8 @@
 import { generateGrid } from "./generateGrid.js";
 import { generateList } from "./generateList.js";
+import {searchNote} from "./search.js";										 
 
+<<<<<<< Updated upstream
 
 function getNotesGrid() {
     $.ajax({
@@ -26,6 +28,33 @@ function getNotesList() {
         console.log(response);
         generateList(response);
     });
+=======
+function getNotesGrid() {
+  $.ajax({
+    url: "api/get_notes.php",
+    type: "GET",
+    datatype: "json",
+  }).done(function (response) {
+    // console.log(response);
+	localStorage.setItem('notes', JSON.stringify(response))
+    for (var i = 0; i < response.length; i++) {
+      // console.log(response[i]);
+      generateGrid(response[i]);
+    }
+  });
+}
+
+function getNotesList() {
+  $.ajax({
+    url: "api/get_notes.php",
+    type: "GET",
+    datatype: "json",
+  }).done(function (response) {
+    console.log(response);
+					localStorage.setItem('notes', JSON.stringify(response))										   
+    generateList(response);
+  });
+>>>>>>> Stashed changes
 }
 
 function setPreferences(elemList) {
@@ -86,9 +115,23 @@ function setUsernameHeading() {
 
 
 $(document).ready(function () {
+<<<<<<< Updated upstream
     $("#errorDiv").hide();
     // use display block to show it
     setUsernameHeading();
     // getNotes();
     setPreferences(['body', 'div', 'h4', 'h5']);
 });
+=======
+  $("#errorDiv").hide();
+
+  $("input:radio[name=mode]").on("click", changeMode);
+  $("input:radio[name=layout]").on("click", changeLayout);
+  // use display block to show it
+  setUsernameHeading();
+  // getNotes();
+  setPreferences(["body", "div", "h4", "h5"]);											
+											
+	$('#txtSearch').on('input', searchNote);								
+});
+>>>>>>> Stashed changes

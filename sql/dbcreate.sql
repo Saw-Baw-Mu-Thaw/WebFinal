@@ -3,9 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+<<<<<<< Updated upstream
 -- Generation Time: May 11, 2025 at 05:25 PM
+=======
+-- Generation Time: May 15, 2025 at 02:41 AM
+>>>>>>> Stashed changes
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -81,6 +85,40 @@ INSERT INTO `notes` (`NoteID`, `Title`, `Location`, `UserID`, `ModifiedDate`, `A
 -- --------------------------------------------------------
 
 --
+<<<<<<< Updated upstream
+=======
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `NotificationID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `NoteID` int(11) NOT NULL,
+  `Message` varchar(255) NOT NULL,
+  `IsRead` tinyint(1) DEFAULT 0,
+  `CreatedAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `otp`
+--
+
+CREATE TABLE `otp` (
+  `OtpID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `Code` int(11) NOT NULL,
+  `Type` enum('activation','password_reset') NOT NULL,
+  `ExpiresAt` datetime NOT NULL,
+  `IsUsed` tinyint(1) DEFAULT 0,
+  `CreatedAt` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+>>>>>>> Stashed changes
 -- Table structure for table `pinnednotes`
 --
 
@@ -191,6 +229,24 @@ ALTER TABLE `notes`
   ADD KEY `UserID` (`UserID`);
 
 --
+<<<<<<< Updated upstream
+=======
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`NotificationID`),
+  ADD KEY `UserID` (`UserID`),
+  ADD KEY `NoteID` (`NoteID`);
+
+--
+-- Indexes for table `otp`
+--
+ALTER TABLE `otp`
+  ADD PRIMARY KEY (`OtpID`),
+  ADD KEY `UserID` (`UserID`);
+
+--
+>>>>>>> Stashed changes
 -- Indexes for table `pinnednotes`
 --
 ALTER TABLE `pinnednotes`
@@ -235,6 +291,21 @@ ALTER TABLE `notes`
   MODIFY `NoteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+<<<<<<< Updated upstream
+=======
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `NotificationID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `otp`
+--
+ALTER TABLE `otp`
+  MODIFY `OtpID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+>>>>>>> Stashed changes
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -264,6 +335,22 @@ ALTER TABLE `notes`
   ADD CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
 
 --
+<<<<<<< Updated upstream
+=======
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`),
+  ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`NoteID`) REFERENCES `notes` (`NoteID`);
+
+--
+-- Constraints for table `otp`
+--
+ALTER TABLE `otp`
+  ADD CONSTRAINT `otp_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE;
+
+--
+>>>>>>> Stashed changes
 -- Constraints for table `pinnednotes`
 --
 ALTER TABLE `pinnednotes`
