@@ -54,17 +54,17 @@ function getNoteContents() {
             }
 
             noteId = response['NoteID'];
-            
+
             // Get current user information
             $.ajax({
                 url: "api/get_user_info.php",
                 type: "GET",
                 dataType: "json"
-            }).done(function(userInfo) {
+            }).done(function (userInfo) {
                 if (userInfo.code === 0) {
                     currentUserId = userInfo.userId;
                     currentUsername = userInfo.username;
-                    
+
                     // If this is a shared note with edit permissions, initialize collaboration
                     if (response['role'] === 'EDITOR' && noteId) {
                         initializeCollaboration();
@@ -78,9 +78,13 @@ function getNoteContents() {
             for (var i = 0; i < labels.length; i++) {
                 var label = labels[i];
                 var labelElem = $(`<div class='d-inline border border-info rounded-pill p-2 m-1'><span>#${label['Label']} </span></div>`)
+                var labelUpdateBtn = $(`<button class='btn btn-primary btn-sm rounded-circle' data-id=${label['LabelID']}></button>`)
+                $(labelUpdateBtn).html('<i class="far fa-edit"></i>')
+                $(labelUpdateBtn).on('click', updateLabel);
+
                 var labelDeleteBtn = $(`<button class='btn btn-danger btn-sm rounded-circle' data-id=${label['LabelID']}>&times;</button>`)
                 $(labelDeleteBtn).on('click', deleteLabel);
-                $(labelElem).append(labelDeleteBtn)
+                $(labelElem).append(labelUpdateBtn, labelDeleteBtn)
                 $('#labelDiv').append(labelElem)
             }
             showSaved()
@@ -102,10 +106,10 @@ function initializeCollaboration() {
         console.error('Missing required data for collaboration');
         return;
     }
-    
+
     // Load collaboration CSS
     $('head').append('<link rel="stylesheet" href="css/collaboration.css">');
-    
+
     // Initialize collaboration module
     collaboration.init(noteId, currentUserId, currentUsername);
     isCollaborationEnabled = true;
@@ -193,7 +197,7 @@ function goHome() {
     if (isCollaborationEnabled) {
         collaboration.disconnect();
     }
-    
+
     location.replace("index.php");
 }
 

@@ -125,14 +125,15 @@ if (!isset($_SESSION['username'])) {
                     <div class="input-group-prepend">
                         <span class="input-group-text">#</span>
                     </div>
-                    <input id='txtLabel' type="text" class="form-control" placeholder="Label">
+                    <input id='txtLabel' type="text" class="form-control" placeholder="Label Name Here">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" id="AddLabelBtn">Add Label</button>
                     </div>
                 </div>
 
+                <p class="d-block text-muted">To rename a label, enter the name you want to rename to and press edit icon below</p>
 
-                <div id='labelDiv' class='p-1'>
+                <div id='labelDiv' class='p-1 col-12'>
 
                 </div>
             </div>

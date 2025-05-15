@@ -3,6 +3,7 @@ import { changeLayout } from "./layout.js";
 import { generateGrid } from "./generateGrid.js";
 import { generateList } from "./generateList.js";
 import { searchNote } from "./search.js";
+import { findLabels } from "./findLabels.js";
 
 
 function getNotesGrid() {
@@ -39,8 +40,9 @@ function setPreferences(elemList) {
     type: "GET",
     datatype: "json",
   }).done(function (response) {
-    console.log(response);
-
+    // console.log(response);
+    localStorage.setItem('Layout', response['Layout'])
+    localStorage.setItem('Mode', response['Mode'])
     if (response["code"] == 0) {
       // console.log("setting preferences");
 
@@ -110,16 +112,53 @@ async function checkElementExists(element, timeout = Infinity) {
   });
 }
 
+function setLabelList() {
+  $.ajax({
+    url: 'api/get_label_list.php',
+    type: 'GET',
+    datatype: 'json'
+  }).done((response) => {
+    if (response['code'] == 0) {
+      var labels = response['labels'];
+
+      // show all button
+      var labelBtn = $('<button></button>')
+      $(labelBtn).addClass('list-group-item list-group-item-action')
+      $(labelBtn).attr('data-label', 0);
+      $(labelBtn).text("Show All");
+      $(labelBtn).on('click', findLabels);
+      $('#labelList').append(labelBtn);
+
+      // then the labels
+      for (var i = 0; i < labels.length; i++) {
+        var labelBtn = $('<button></button>')
+        $(labelBtn).addClass('list-group-item list-group-item-action')
+        $(labelBtn).attr('data-label', labels[i]);
+        $(labelBtn).text("#" + labels[i]);
+        $(labelBtn).on('click', findLabels);
+        $('#labelList').append(labelBtn);
+      }
+    }
+  })
+}
+
 $(document).ready(function () {
   $("#errorDiv").hide();
 
   $("input:radio[name=mode]").on("click", changeMode);
   $("input:radio[name=layout]").on("click", changeLayout);
+
+
+
   // use display block to show it
   setUsernameHeading();
   // getNotes();
   setPreferences(["body", "div", "h4", "h5"]);
 
+  setLabelList();
+
   $('#txtSearch').on('input', searchNote);
+
+
 });
 

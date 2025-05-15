@@ -652,3 +652,37 @@ function unattach_note_img($noteId)
     return $res;
 }
 
+function update_locked_note($noteId, $password)
+{
+    $conn = get_conn();
+
+    $query = "Update LockedNotes Set Password = ? Where NoteID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'si', $password, $noteId);
+    $res = mysqli_execute($stmt);
+    mysqli_close($conn);
+    return $res;
+}
+
+function update_label($labelId, $labelName)
+{
+    $conn = get_conn();
+    $query = "Update Labels Set Label = ? Where LabelID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'si', $labelName, $labelId);
+    $res = mysqli_execute($stmt);
+    mysqli_close($conn);
+    return $res;
+}
+
+function get_uniq_labels($userId)
+{
+    $conn = get_conn();
+    $query = "Select Distinct Label from Labels Where UserID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'i', $userId);
+    mysqli_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    $arr = mysqli_fetch_all($res, MYSQLI_NUM);
+    return $arr;
+}

@@ -32,7 +32,7 @@ if (!$user) {
 if ($user['ProfilePic']) {
     $profilePicUrl = $user['ProfilePic'];
 } else {
-    $profilePicUrl = '../images/default-avatar.png';
+    $profilePicUrl = './images/default-avatar.jpg';
 }
 
 // Return the user profile data
@@ -43,4 +43,4 @@ die(json_encode(array(
     'email' => $user['Email'],
     'verified' => $user['Verified'],
     'profilePic' => $profilePicUrl
-))); 
+)));

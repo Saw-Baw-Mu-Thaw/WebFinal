@@ -4,7 +4,7 @@ import { showError } from "./utils.js";
 
 function changeLayout(e) {
     var layout = $(e.target).val();
-
+    localStorage.setItem('Layout', layout);
     // console.log(layout);
     $.ajax({
         url: 'api/update_layout.php?layout=' + layout,
@@ -28,6 +28,15 @@ function changeLayout(e) {
             }
         } else {
             generateList(notes)
+        }
+
+        var mode = localStorage.getItem('Mode');
+        if (mode === "DARK") {
+            $('mode-target').removeClass('bg-dark bg-light')
+            $('mode-target').addClass('bg-dark')
+        } else {
+            $('mode-target').removeClass('bg-dark bg-light')
+            $('mode-target').addClass('bg-light')
         }
 
         // set light mode and dark mode

@@ -53,6 +53,12 @@ function generateList(response) {
             $(actionCell).append(openBtn);
         } else {
             $(actionCell).append(openBtn, delBtn, lockBtn);
+
+            if (obj['Locked']) { // add change password button
+                var changeBtn = $(`<button class='btn btn-info mx-1' onclick='changeNotePassword(${obj['NoteID']})'></button>`)
+                $(changeBtn).html('<i class="fas fa-key"></i>')
+                $(actionCell).append(changeBtn)
+            }
         }
         $(trow).append(index, title, lastModified, actionCell, labelCell, pinCell);
         $(tbody).append(trow);

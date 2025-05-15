@@ -106,7 +106,7 @@ function sendDelete(e) {
 function lockNote(noteId) {
     // console.log("NOte ID : " + noteId)
 
-    console.log('locking note');
+    // console.log('locking note');
     $(".modal-title").text("Set your password");
     $('#pwdSetBtn').data("id", noteId);
     $("#pwdSetBtn").on('click', setPassword);
@@ -183,6 +183,74 @@ function createNote() {
         } else {
             // easiest way
             showError(response['message'])
+        }
+    })
+}
+
+function changeNotePassword(noteId) {
+    // console.log('Change password of ', noteId)
+
+    // show the modal
+    $(".modal-title").text("Change Password");
+    $('#pwdChangeBtn').data("id", noteId);
+    $("#pwdChangeBtn").on('click', sendNewPassword);
+    $("#pwdChangeError").hide();
+    $("#changePwdModal").modal('show');
+}
+
+function sendNewPassword(e) {
+    var NoteId = $(e.target).data('id');
+    var OldPwd = $('#oldPwd').val();
+    var NewPwd1 = $('#pwd3').val();
+    var NewPwd2 = $('#pwd4').val();
+
+    if (NewPwd1 !== NewPwd2) {
+        $('#pwdChangeError').text("New passwords are not the same")
+        $("#pwdChangeError").show();
+        window.setTimeout(() => {
+            $('#pwdChangeError').hide()
+        }, 1000)
+
+        window.setTimeout(function () { $("#pwdChangeError").hide() }, 2500)
+    }
+
+    if (OldPwd.length == 0 || NewPwd1.length == 0 || NewPwd2.length == 0) {
+        $('#pwdChangeError').text("Passwords can't be empty")
+        $("#pwdChangeError").show();
+        window.setTimeout(() => {
+            $('#pwdChangeError').hide()
+        }, 1000)
+
+        window.setTimeout(function () { $("#pwdChangeError").hide() }, 2500)
+    }
+
+    $.ajax({
+        url: 'api/update_note_pwd.php',
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify({ oldPwd: OldPwd, newPwd1: NewPwd1, newPwd2: NewPwd2, noteId: NoteId })
+    }).done((response) => {
+        if (response['code'] == 0) {
+            // location.reload();
+            $('#pwdChangeError').removeClass('alert-danger')
+            $('#pwdChangeError').addClass('alert-success')
+            $('#pwdChangeError').text("Passwords changed successfully")
+            $("#pwdChangeError").show();
+
+            window.setTimeout(() => {
+                $('#pwdChangeError').hide()
+                $('#pwdChangeError').removeClass('alert-success')
+                $('#pwdChangeError').addClass('alert-danger')
+            }, 500)
+
+            window.setTimeout(function () { $("#pwdChangeError").hide() }, 2500)
+        } else {
+            $('#pwdChangeError').text(response['message'])
+            $("#pwdChangeError").show();
+            window.setTimeout(() => {
+                $('#pwdChangeError').hide()
+            }, 1000)
+            $('#changePwdModal').modal('hide')
         }
     })
 }

@@ -3,6 +3,7 @@ var interval = null;
 
 function changeMode(e) {
     var mode = $(e.target).val()
+    localStorage.setItem('Mode', mode);
     $(e.target).prop('checked', true)
 
     $.ajax({

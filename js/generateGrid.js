@@ -2,9 +2,8 @@ import { formatDatetime } from "./utils.js";
 import { removeAtchImg } from "./removeAttachedImg.js";
 
 function generateGrid(obj) {
-
     // create a row of cards
-    var card = $("<div class='card col-lg-4 col-12 m-1 mode-target'></div>");
+    var card = $("<div class='card col-lg-5 col-12 m-1 mode-target'></div>");
     var cardBody = $("<div class='card-body'></div>");
     var cardTitle = $("<h5 class='card-title'></h5>").text(obj['Title']);
     var cardText = $("<p class='card-text'></p>").html("Last Modified : " + formatDatetime(obj['LastModified']));
@@ -81,6 +80,11 @@ function generateGrid(obj) {
         $(cardBody).append(cardTitle, cardText, openBtn);
     } else {
         $(cardBody).append(cardTitle, cardText, openBtn, delBtn, lockBtn);
+        if (obj['Locked']) { // add change password button
+            var changeBtn = $(`<button class='btn btn-info mx-1' onclick='changeNotePassword(${obj['NoteID']})'></button>`)
+            $(changeBtn).html('<i class="fas fa-key"></i>')
+            $(cardBody).append(changeBtn)
+        }
 
         // add button to revert attached image back to default
         if (obj['AttachedImg'] != null) {

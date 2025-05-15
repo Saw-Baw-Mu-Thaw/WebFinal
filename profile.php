@@ -42,7 +42,7 @@ if (!isset($_SESSION['username'])) {
                 <div class="card mb-4">
                     <div class="card-body">
                         <div id="profile-image-container" class="mb-3">
-                            <img id="profileImage" src="images/default-avatar.png" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                            <img id="profileImage" src="images/default_profile_pic.jpg" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
                         </div>
                         <h4 id="profileUsername"></h4>
                         <p id="profileEmail" class="text-muted"></p>
@@ -97,7 +97,7 @@ if (!isset($_SESSION['username'])) {
                 <div class="modal-body">
                     <form id="editProfileForm" enctype="multipart/form-data">
                         <div class="form-group text-center">
-                            <img id="avatarPreview" src="images/default-avatar.png" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            <img id="avatarPreview" src="images/default_profile_pic.jpg" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="profilePictureInput" name="profilePicture" accept="image/*">
                                 <label class="custom-file-label" for="profilePictureInput">Choose avatar...</label>
@@ -143,4 +143,4 @@ if (!isset($_SESSION['username'])) {
     <script src="./js/profile.js"></script>
 </body>
 
-</html> 
+</html>

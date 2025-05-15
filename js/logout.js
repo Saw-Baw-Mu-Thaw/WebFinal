@@ -5,6 +5,7 @@ function Logout() {
         datatype: 'json'
     }).done(function (response) {
         if (response['code'] == 0) {
+            localStorage.clear(); // delete stored mode, layout and notes
             window.location.replace('logout.php');
         }
     });

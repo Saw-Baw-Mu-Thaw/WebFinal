@@ -30,3 +30,34 @@ function deleteLabel(e) {
         }
     })
 }
+
+function updateLabel(e) {
+    var LabelId = $(e.target).data('id')
+    var LabelName = $('#txtLabel').val()
+
+    if (LabelName.length == 0) {
+        $('#statusDiv').removeClass("alert alert-danger alert-success alert-warning")
+        $('#statusDiv').text("Label name is empty");
+        $('#statusDiv').addClass("alert alert-danger")
+        return;
+    }
+
+    $.ajax({
+        url: 'api/update_label.php',
+        type: 'POST',
+        datatype: "json",
+        data: JSON.stringify({ labelId: LabelId, labelName: LabelName })
+    }).done((response) => {
+        if (response['code'] == 0) {
+            location.reload();
+        } else {
+            $('#statusDiv').removeClass("alert alert-danger alert-success alert-warning")
+            $('#statusDiv').text(response['message']);
+            $('#statusDiv').addClass("alert alert-danger")
+        }
+    }).fail(() => {
+        $('#statusDiv').removeClass("alert alert-danger alert-success alert-warning")
+        $('#statusDiv').text("Can't connect to server");
+        $('#statusDiv').addClass("alert alert-danger")
+    })
+}
