@@ -29,6 +29,23 @@ include 'api/unverified.php';
                 <img class="img-fluid" src="images/Skeleton.png" alt="SkeleLogo" />
             </div>
             <div class="d-flex col-3 justify-content-end align-items-center">
+                <!-- User Avatar -->
+                <div class="dropdown mr-2">
+                    <a href="#" class="dropdown-toggle text-decoration-none" id="userDropdown" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <img id="headerAvatar" src="images/default-avatar.png" alt="User Avatar"
+                            class="rounded-circle border" style="width: 40px; height: 40px; object-fit: cover;">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="profile.php">
+                            <i class="fas fa-user-circle mr-2"></i>View Profile
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" onclick="Logout(); return false;">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
                 <!-- Notifications dropdown -->
                 <div class="dropdown mr-2">
                     <button class="btn btn-secondary position-relative" type="button" id="notificationsBtn"
@@ -53,7 +70,6 @@ include 'api/unverified.php';
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-secondary" onclick="Logout()">Logout</button>
             </div>
         </div>
 
@@ -189,7 +205,8 @@ include 'api/unverified.php';
                 <div class='input-group-prepend'>
                     <span class='input-group-text'> Search </span>
                 </div>
-                <input type='text' class="form-control" id='txtSearch' placeholder="Use # to search for labels e.g. #potato" />
+                <input type='text' class="form-control" id='txtSearch'
+                    placeholder="Use # to search for labels e.g. #potato" />
             </div>
 
             <div class='list-group col-12' id='searchList'>
@@ -197,7 +214,7 @@ include 'api/unverified.php';
             </div>
         </div>
 
-        <div class="row m-2">									 
+        <div class="row m-2">
             <h3 id='errorDiv' class="alert alert-danger col-12 text-center p-3">
 
             </h3>
@@ -218,6 +235,7 @@ include 'api/unverified.php';
     <script src="./js/logout.js"></script>
     <script src='./js/notifications.js'></script>
     <script src='./js/imgUpload.js'></script>
+    <script src='./js/loadUserAvatar.js'></script>
     <!--  -->
 </body>
 
