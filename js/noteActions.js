@@ -192,25 +192,6 @@ function sendPwdforRemove(e) {
     })
 }
 
-function createNote() {
-    var Title = $("#txtTitle").val()
-
-    $.ajax({
-        url: 'api/create_note.php',
-        type: "POST",
-        datatype: "json",
-        contenttype: "application/json",
-        data: JSON.stringify({ title: Title })
-    }).done(function (response) {
-        if (response['code'] == 0) {
-            window.location.replace('edit.php');
-        } else {
-            // easiest way
-            showError(response['message'])
-        }
-    })
-}
-
 function changeNotePassword(noteId) {
     // console.log('Change password of ', noteId)
 
@@ -278,6 +259,64 @@ function sendNewPassword(e) {
 
         }
     })
+}
+
+/**
+ * Creates a new empty note in the database and redirects to edit page
+ */
+function createEmptyNote() {
+    // Create a default title - user can change it in the edit page
+    const defaultTitle = "New Note " + new Date().toLocaleString().replace(/[\/:\\]/g, '-');
+    
+    // Check if offline - create in IndexedDB if so
+    if (window.OfflineNotesManager && !window.OfflineNotesManager.isOnline()) {
+        console.log('Creating offline note');
+        window.OfflineNotesManager.createNoteOffline(defaultTitle, '')
+            .then(note => {
+                // Store the note ID in localStorage
+                localStorage.setItem('currentNoteId', note.id);
+                // Redirect to the edit page
+                window.location.replace('edit.php');
+            })
+            .catch(error => {
+                console.error('Error creating offline note:', error);
+                showError('Failed to create offline note');
+            });
+        return;
+    }
+    
+    // Otherwise, use the server to create a note
+    $.ajax({
+        url: 'api/create_empty_note.php',
+        type: "POST",
+        datatype: "json",
+        contentType: "application/json",
+        data: JSON.stringify({ title: defaultTitle })
+    }).done(function (response) {
+        if (response['code'] == 0) {
+            // Redirect to edit page for the newly created note
+            window.location.replace("edit.php");
+        } else {
+            showError(response['message']);
+        }
+    }).fail(function() {
+        // If we're offline, try to create an offline note
+        if (window.OfflineNotesManager) {
+            window.OfflineNotesManager.createNoteOffline(defaultTitle, '')
+                .then(note => {
+                    // Store the note ID in localStorage
+                    localStorage.setItem('currentNoteId', note.id);
+                    // Redirect to the edit page
+                    window.location.replace('edit.php');
+                })
+                .catch(error => {
+                    console.error('Error creating offline note:', error);
+                    showError('Failed to create offline note');
+                });
+        } else {
+            showError("Failed to create new note - you appear to be offline");
+        }
+    });
 }
 
 function showError(msg) {

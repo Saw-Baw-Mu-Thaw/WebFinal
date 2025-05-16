@@ -18,4 +18,4 @@ if ($row == false || $row == null) {
 }
 
 header(http_response_code(200));
-echo json_encode(array("code" => 0, "FontSize" => $row['FontSize'], "Mode" => $row['Mode'], "Layout" => $row['Layout']));
+echo json_encode(array("code" => 0, "FontSize" => $row['FontSize'], "Mode" => $row['Mode'], "Layout" => $row['Layout'], "NoteColor" => $row['NoteColor'] ?? '#ffffff'));

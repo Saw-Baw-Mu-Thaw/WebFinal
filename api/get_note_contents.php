@@ -10,10 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] != 'GET') {
     die(json_encode(array('code' => 4, 'message' => 'This API only supports GET')));
 }
 
-$id = $_SESSION['currNoteID'];
-$action = $_SESSION['action'];
 $userId = $_SESSION['userId'];
-
+$id = $_SESSION['currNoteID'];
+$action = isset($_SESSION['action']) ? $_SESSION['action'] : 'EDIT';
 
 $title = get_note_title($id);
 

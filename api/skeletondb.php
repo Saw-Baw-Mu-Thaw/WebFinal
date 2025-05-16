@@ -686,3 +686,36 @@ function get_uniq_labels($userId)
     $arr = mysqli_fetch_all($res, MYSQLI_NUM);
     return $arr;
 }
+
+function update_preferences($userId, $fontSize, $noteColor) {
+    $conn = get_conn();
+    
+    // Convert font size string to pixel value
+    $fontSizeMap = [
+        'small' => 14,
+        'medium' => 16,
+        'large' => 18
+    ];
+    $fontSizePx = $fontSizeMap[$fontSize] ?? 16;
+    
+    $query = "UPDATE preferences SET FontSize = ?, NoteColor = ? WHERE UserID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'isi', $fontSizePx, $noteColor, $userId);
+    $res = mysqli_execute($stmt);
+    
+    mysqli_close($conn);
+    return $res;
+}
+
+function update_preferences_numeric($userId, $fontSizePx, $noteColor) {
+    $conn = get_conn();
+    
+    // fontSizePx is already a numeric pixel value, no conversion needed
+    $query = "UPDATE preferences SET FontSize = ?, NoteColor = ? WHERE UserID = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'isi', $fontSizePx, $noteColor, $userId);
+    $res = mysqli_execute($stmt);
+    
+    mysqli_close($conn);
+    return $res;
+}

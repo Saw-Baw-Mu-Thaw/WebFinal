@@ -1,0 +1,867 @@
+/* Main Styles for Notes App */
+:root {
+  /* Light mode variables */
+  --primary-color: #007bff;
+  --primary-dark: #0056b3;
+  --secondary-color: #6c757d;
+  --light-bg: #f8f9fa;
+  --dark-bg: #1a1a2e; /* Darker, more modern background */
+  --dark-text: #212529;
+  --light-text: #f8f9fa;
+  --border-color: #dee2e6;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --note-color: #ffffff;
+  --note-font-size: 16px;
+  --border-radius: 0.25rem;
+  --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --box-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --transition-speed: 0.3s;
+  
+  /* Dark mode specific variables */
+  --dark-card-bg: #16213e; /* Slightly lighter than background for contrast */
+  --dark-card-header: #0f3460; /* Accent color for headers */
+  --dark-border-color: #293B5F; /* Subtle border color */
+  --dark-input-bg: #1f2b46; /* Slightly lighter than cards for form elements */
+  --dark-hover-bg: rgba(79, 134, 247, 0.15); /* Subtle hover effect */
+  --dark-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* More pronounced shadows */
+}
+
+/* Base styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color var(--transition-speed) ease;
+  line-height: 1.6;
+}
+
+/* Dark Mode Styles */
+body.bg-dark {
+  background-color: var(--dark-bg);
+  color: var(--light-text);
+}
+
+.bg-dark .card {
+  background-color: var(--dark-card-bg);
+  color: var(--light-text);
+  border-color: var(--dark-border-color);
+  box-shadow: var(--dark-box-shadow);
+}
+
+.bg-dark .card-header, .bg-dark .card-footer {
+  background-color: var(--dark-card-header);
+  border-color: var(--dark-border-color);
+}
+
+.bg-dark .list-group-item {
+  background-color: var(--dark-card-bg);
+  color: var(--light-text);
+  border-color: var(--dark-border-color);
+  transition: all var(--transition-speed) ease;
+}
+
+.bg-dark .list-group-item:hover {
+  background-color: var(--dark-hover-bg);
+}
+
+.bg-dark .form-control {
+  background-color: var(--dark-input-bg);
+  color: var(--light-text);
+  border-color: var(--dark-border-color);
+}
+
+/* Form elements in dark mode */
+.bg-dark .form-control-lg {
+  background-color: var(--dark-input-bg);
+  color: var(--light-text);
+  border-color: var(--dark-border-color);
+}
+
+/* Note editor in dark mode */
+.bg-dark .note-editor {
+  background-color: var(--dark-input-bg);
+  color: var(--light-text);
+  box-shadow: var(--dark-box-shadow);
+}
+
+/* Textarea in dark mode */
+.bg-dark #textareaElem {
+  background-color: var(--dark-input-bg);
+  color: var(--light-text);
+  border: 1px solid var(--dark-border-color);
+}
+
+/* Title input in dark mode */
+.bg-dark #title {
+  background-color: var(--dark-input-bg);
+  color: var(--light-text);
+}
+
+/* Focus states for form controls */
+.bg-dark .form-control:focus {
+  background-color: var(--dark-input-bg);
+  color: var(--light-text);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Tables in dark mode */
+.bg-dark .table {
+  color: var(--light-text);
+}
+
+.bg-dark .table-hover tbody tr:hover {
+  background-color: var(--dark-hover-bg);
+}
+
+/* Modals in dark mode */
+.bg-dark .modal-content {
+  background-color: var(--dark-card-bg);
+  color: var(--light-text);
+  border-color: var(--dark-border-color);
+  box-shadow: var(--dark-box-shadow);
+}
+
+.bg-dark .modal-header {
+  border-bottom-color: var(--dark-border-color);
+  background-color: var(--dark-card-header);
+}
+
+.bg-dark .modal-footer {
+  border-top-color: var(--dark-border-color);
+}
+
+.bg-dark .close {
+  color: var(--light-text);
+}
+
+/* Animated Logo */
+.logo-container {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.logo-container:hover {
+  transform: scale(1.05);
+}
+
+/* Note cards */
+.note-card {
+  position: relative;
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--border-color);
+  height: 100%;
+}
+
+/* Grid layout for notes */
+#mainContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* Consistent spacing between cards */
+  justify-content: flex-start;
+}
+
+/* Grid card styling */
+.grid-card {
+  flex: 1 0 300px; /* Grow, don't shrink, base width 300px */
+  max-width: calc(50% - 1rem); /* Maximum width of half the container minus gap */
+  margin: 0; /* Remove margin as we're using gap */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Improve image handling in grid cards */
+.grid-card .card-img-container {
+  height: 180px; /* Fixed height for image containers */
+  overflow: hidden; /* Hide overflow */
+  position: relative;
+}
+
+.grid-card .card-img-top {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure images cover the container nicely */
+}
+
+/* Style for image drop area */
+.grid-card .card-img-container.text-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.03);
+  height: 120px; /* Smaller height for drop areas */
+}
+
+/* Ensure cards have a minimum height */
+.grid-card .card-body {
+  flex: 1 1 auto; /* Allow card body to grow and fill space */
+}
+
+/* Responsive adjustments for grid cards */
+@media (max-width: 992px) {
+  .grid-card {
+    max-width: calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-card {
+    max-width: 100%;
+  }
+}
+
+.note-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--box-shadow-lg);
+  z-index: 1;
+}
+
+/* Enhanced hover effect for dark mode */
+.bg-dark .note-card:hover {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+  border-color: rgba(79, 134, 247, 0.4);
+}
+
+/* Status icons - ensure they're always on top */
+.note-card .position-absolute {
+  z-index: 10;
+}
+
+/* Badge styling */
+.badge-pill {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.note-card .card-body {
+  background-color: var(--note-color);
+  transition: all var(--transition-speed) ease;
+}
+
+/* Dark mode note card body */
+.bg-dark .note-card .card-body {
+  background-color: var(--dark-card-bg);
+}
+
+.note-card .card-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-card .card-text {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4; /* Standard property for compatibility */
+  -webkit-box-orient: vertical;
+  line-height: 1.5;
+}
+
+/* Note card actions */
+.card-actions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+  z-index: 20; /* Ensure actions are above images */
+  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background for light mode */
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+}
+
+/* Dark mode support for card actions */
+.bg-dark .card-actions {
+  background-color: rgba(15, 52, 96, 0.85); /* Semi-transparent dark background that matches the theme */
+  backdrop-filter: blur(4px); /* Add a subtle blur effect */
+  -webkit-backdrop-filter: blur(4px); /* For Safari support */
+}
+
+.note-card:hover .card-actions {
+  opacity: 1;
+}
+
+.card-actions .btn {
+  margin-left: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Note list view */
+.note-list-item {
+  transition: background-color var(--transition-speed) ease;
+  border-left: 3px solid transparent;
+}
+
+.note-list-item:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  border-left-color: var(--primary-color);
+}
+
+/* Form elements */
+.form-control {
+  transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Buttons */
+.btn {
+  transition: all var(--transition-speed) ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+/* Dark mode button enhancements */
+.bg-dark .btn-light {
+  background-color: var(--dark-input-bg);
+  border-color: var(--dark-border-color);
+  color: var(--light-text);
+}
+
+.bg-dark .btn-light:hover {
+  background-color: rgba(79, 134, 247, 0.2);
+  color: white;
+}
+
+.bg-dark .btn-primary {
+  background-color: #4f86f7; /* Brighter blue for dark mode */
+  border-color: #4f86f7;
+}
+
+.bg-dark .btn-primary:hover {
+  background-color: #3a75f0;
+  border-color: #3a75f0;
+  box-shadow: 0 0 10px rgba(79, 134, 247, 0.5);
+}
+
+/* Search box */
+.search-container {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.search-container .form-control {
+  padding-left: 2.5rem;
+  border-radius: 2rem;
+}
+
+.search-container .search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-color);
+}
+
+/* Dark mode search box */
+.bg-dark .search-container .form-control {
+  background-color: var(--dark-input-bg);
+  border-color: var(--dark-border-color);
+  color: var(--light-text);
+  box-shadow: var(--dark-box-shadow);
+}
+
+.bg-dark .search-container .search-icon {
+  color: #8a94a6; /* Lighter color for better visibility */
+}
+
+.bg-dark .search-container .form-control:focus {
+  border-color: #4f86f7;
+  box-shadow: 0 0 0 0.2rem rgba(79, 134, 247, 0.25);
+}
+
+/* Labels */
+.label-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem;
+  border-radius: 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 0.85rem;
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.label-badge:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.label-badge .badge-remove {
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+/* Dark mode label badges */
+.bg-dark .label-badge {
+  background-color: #4f86f7; /* Brighter blue for dark mode */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bg-dark .label-badge:hover {
+  background-color: #3a75f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(79, 134, 247, 0.3);
+}
+
+/* Note editor */
+.note-editor {
+  border: none;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  min-height: 300px;
+}
+
+#textareaElem {
+  resize: vertical;
+  min-height: 300px;
+  font-size: var(--note-font-size);
+  background-color: var(--note-color);
+  transition: all var(--transition-speed) ease;
+  border: 1px solid transparent;
+  padding: 1rem;
+}
+
+#textareaElem:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+#title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: all var(--transition-speed) ease;
+}
+
+#title:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Status indicators */
+.status-indicator {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: all var(--transition-speed) ease;
+}
+
+/* Offline indicator */
+#offline-status, #offline-indicator {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  color: white;
+  font-weight: 500;
+  z-index: 1050;
+  box-shadow: var(--box-shadow);
+  transition: all var(--transition-speed) ease;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(10px); }
+}
+
+.online-status {
+  background-color: var(--success-color);
+  animation: fadeIn 0.5s, fadeOut 0.5s 2.5s forwards;
+}
+
+.offline-status {
+  background-color: var(--danger-color);
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0.2rem solid rgba(0, 123, 255, 0.2);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* PWA install prompt */
+.pwa-install-prompt {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  max-width: 400px;
+  animation: slideUp 0.5s;
+}
+
+.pwa-install-prompt .btn-close {
+  margin-left: auto;
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 100%); }
+  to { transform: translate(-50%, 0); }
+}
+
+/* Responsive Design System */
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .container {
+    max-width: 1140px;
+  }
+  
+  /* Enhance readability on larger screens */
+  body {
+    font-size: 16px;
+  }
+  
+  /* Optimize grid layout for desktop */
+  .grid-card {
+    flex: 1 0 300px;
+    max-width: calc(33.333% - 1rem);
+  }
+  
+  /* Ensure comfortable spacing */
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  /* Enhanced hover effects for desktop */
+  .note-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Show more content in previews */
+  .note-card .card-text {
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+  }
+}
+
+/* Medium devices (tablets, 768px to 991px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  /* Optimize grid layout for tablets */
+  .grid-card {
+    flex: 1 0 280px;
+    max-width: calc(50% - 1rem);
+  }
+  
+  /* Adjust navbar for tablet */
+  .navbar {
+    padding: 0.5rem 1rem;
+  }
+  
+  /* Adjust button groups for tablet */
+  .btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  /* Optimize image sizes for tablets */
+  .grid-card .card-img-container {
+    height: 160px;
+  }
+  
+  /* Adjust spacing */
+  .card-body {
+    padding: 1.25rem;
+  }
+  
+  /* Ensure label sidebar is usable */
+  .col-lg-3.col-md-4 {
+    padding-right: 1rem;
+  }
+}
+
+/* Small devices (landscape phones, 576px to 767px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  /* Optimize grid layout for landscape phones */
+  .grid-card {
+    flex: 1 0 250px;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  /* Adjust navbar for mobile */
+  .navbar {
+    padding: 0.5rem;
+  }
+  
+  /* Make buttons more tappable */
+  .btn {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Optimize image sizes */
+  .grid-card .card-img-container {
+    height: 140px;
+  }
+  
+  /* Adjust card actions for better mobile UX */
+  .card-actions {
+    opacity: 1;
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+    background-color: transparent;
+  }
+  
+  /* Make buttons more tappable */
+  .card-actions .btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: 0.5rem;
+  }
+  
+  /* Adjust notifications and indicators */
+  #offline-status, #offline-indicator {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Make search more usable on mobile */
+  .search-container .form-control {
+    height: calc(1.5em + 1rem + 2px);
+    font-size: 1rem;
+  }
+  
+  /* Adjust main layout */
+  .row {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  
+  .col-12, .col-md-4, .col-md-8, .col-lg-3, .col-lg-9 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  /* Adjust PWA prompt */
+  .pwa-install-prompt {
+    width: 90%;
+    max-width: none;
+    padding: 0.75rem;
+  }
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  /* Full width cards for smallest screens */
+  .grid-card {
+    flex: 1 0 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  /* Compact navbar */
+  .navbar {
+    padding: 0.5rem;
+  }
+  
+  .navbar-brand span {
+    font-size: 1rem;
+  }
+  
+  .navbar-brand img {
+    height: 30px;
+  }
+  
+  /* Optimize button groups */
+  .btn-group-sm {
+    margin-right: 0.5rem !important;
+  }
+  
+  /* Hide text labels on small screens */
+  .btn i {
+    margin-right: 0 !important;
+  }
+  
+  /* Stack buttons if needed */
+  .d-flex.justify-content-between {
+    flex-wrap: wrap;
+  }
+  
+  .d-flex.justify-content-between .btn {
+    margin-top: 0.5rem;
+  }
+  
+  /* Make buttons more tappable */
+  .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Adjust card actions for better mobile UX */
+  .card-actions {
+    opacity: 1;
+    position: static;
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+    background-color: transparent;
+  }
+  
+  /* Make buttons more tappable */
+  .card-actions .btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0 0.25rem;
+  }
+  
+  /* Optimize image sizes */
+  .grid-card .card-img-container {
+    height: 120px;
+  }
+  
+  /* Adjust card body padding */
+  .card-body {
+    padding: 1rem;
+  }
+  
+  /* Smaller font sizes */
+  .note-card .card-title {
+    font-size: 1.25rem;
+  }
+  
+  /* Reduce content preview */
+  .note-card .card-text {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+  
+  /* Adjust notifications and indicators */
+  #offline-status, #offline-indicator {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Optimize container padding */
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  /* Adjust margins and padding */
+  .row {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  
+  .col-12, .col-md-4, .col-md-8, .col-lg-3, .col-lg-9 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  /* Optimize label badges for small screens */
+  .label-badge {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+    margin: 0.15rem;
+  }
+  
+  /* Adjust PWA prompt */
+  .pwa-install-prompt {
+    width: 95%;
+    max-width: none;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Optimize search */
+  .search-container {
+    margin-bottom: 1rem;
+  }
+  
+  .search-container .form-control {
+    height: calc(1.5em + 0.75rem + 2px);
+    font-size: 0.875rem;
+    padding-left: 2rem;
+  }
+  
+  /* Adjust dropdown menus */
+  .dropdown-menu {
+    width: 280px !important;
+    max-height: 250px !important;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .note-card {
+    margin-bottom: 1rem;
+  }
+  
+  .card-actions {
+    opacity: 1;
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+  
+  #offline-status, #offline-indicator {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .pwa-install-prompt {
+    width: 90%;
+    max-width: none;
+  }
+}

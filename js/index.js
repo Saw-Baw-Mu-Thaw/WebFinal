@@ -4,6 +4,7 @@ import { generateGrid } from "./generateGrid.js";
 import { generateList } from "./generateList.js";
 import { searchNote } from "./search.js";
 import { findLabels } from "./findLabels.js";
+import { showError, showOfflineWarning } from "./utilities.js";
 
 
 function getNotesGrid() {
@@ -14,9 +15,29 @@ function getNotesGrid() {
   }).done(function (response) {
     // console.log(response);
     localStorage.setItem('notes', JSON.stringify(response))
+    // Save to IndexedDB for offline use
+    if (window.OfflineNotesManager) {
+      OfflineNotesManager.saveNotesToIndexedDB(response);
+    }
     for (var i = 0; i < response.length; i++) {
       // console.log(response[i]);
       generateGrid(response[i]);
+    }
+  }).fail(function(error) {
+    console.log('Failed to fetch notes from server, trying IndexedDB');
+    if (window.OfflineNotesManager) {
+      OfflineNotesManager.getNotesFromIndexedDB().then(notes => {
+        if (notes && notes.length > 0) {
+          localStorage.setItem('notes', JSON.stringify(notes));
+          for (var i = 0; i < notes.length; i++) {
+            generateGrid(notes[i]);
+          }
+          // Show offline indicator
+          showOfflineWarning();
+        } else {
+          showError("No cached notes available offline");
+        }
+      });
     }
   });
 }
@@ -29,9 +50,26 @@ function getNotesList() {
   }).done(function (response) {
     // console.log(response);
     localStorage.setItem('notes', JSON.stringify(response))
+    // Save to IndexedDB for offline use
+    if (window.OfflineNotesManager) {
+      OfflineNotesManager.saveNotesToIndexedDB(response);
+    }
     generateList(response);
+  }).fail(function(error) {
+    console.log('Failed to fetch notes from server, trying IndexedDB');
+    if (window.OfflineNotesManager) {
+      OfflineNotesManager.getNotesFromIndexedDB().then(notes => {
+        if (notes && notes.length > 0) {
+          localStorage.setItem('notes', JSON.stringify(notes));
+          generateList(notes);
+          // Show offline indicator
+          showOfflineWarning();
+        } else {
+          showError("No cached notes available offline");
+        }
+      });
+    }
   });
-
 }
 
 function setPreferences(elemList) {
@@ -43,6 +81,20 @@ function setPreferences(elemList) {
     // console.log(response);
     localStorage.setItem('Layout', response['Layout'])
     localStorage.setItem('Mode', response['Mode'])
+    
+    // Save font size and note color to localStorage
+    const fontSize = response['FontSize'] ? response['FontSize'] : 16;
+    const fontSizePx = fontSize + 'px';
+    const noteColor = response['NoteColor'] || '#ffffff';
+    
+    // Store raw pixel value in localStorage
+    localStorage.setItem('fontSize', fontSize.toString());
+    localStorage.setItem('noteColor', noteColor);
+    
+    // Apply CSS variables
+    document.documentElement.style.setProperty('--note-font-size', fontSizePx);
+    document.documentElement.style.setProperty('--note-color', noteColor);
+    
     if (response["code"] == 0) {
       // console.log("setting preferences");
 
@@ -53,14 +105,17 @@ function setPreferences(elemList) {
         getNotesList();
       }
 
-      // set font size here
+      // Apply font size to specific elements
       for (var i = 0; i < elemList.length; i++) {
-        // console.log("setting font size")
-        $(elemList[i]).css("font-size", response["FontSize"]);
+        $(elemList[i]).css("font-size", fontSizePx);
       }
+      
+      // Make sure to apply font size to note elements after they're loaded
+      setTimeout(() => {
+        $('.note, .card-text, .card-body, textarea').css('font-size', fontSizePx);
+      }, 500);
 
       // set light or dark mode here
-
       if (response["Layout"] == "GRID") {
         checkElementExists(".card", 5).then((result) => {
           if (result) {

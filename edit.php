@@ -17,53 +17,76 @@ if (!isset($_SESSION['username'])) {
     <meta name="Description" content="Enter your description here" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Collaboration CSS will be loaded dynamically when needed -->
     <title>Edit</title>
 </head>
 
 <body class='mode-target'>
     <div class="container mode-target">
-        <div class="row mode-target">
-            <div class="col-3 mr-auto p-3 text-center">
-                <img class="img-fluid" src="images/Skeleton.png" alt="SkeleLogo" />
-            </div>
-            <div class="d-flex col-3 justify-content-end align-items-center">
-                <button class="btn btn-secondary" onclick="Logout()">Logout</button>
-            </div>
-        </div>
-
-        <div class="border rounded">
-            <div class="row p-3 mode-target">
-                <div class="col-4 p-1">
-                    <button class="btn btn-primary" type="button" id="homeBtn">
-                        <i class="fas fa-home"></i></button>
-                    <div class='btn-group btn-group-toggle border rounded m-1' data-toggle="button">
-                        <label class="btn btn-light">
-                            <input type="radio" name="mode" value='LIGHT'> <i class="far fa-sun"></i>
-                        </label>
-                        <label class="btn btn-dark">
-                            <input type='radio' name='mode' value='DARK'> <i class="far fa-moon"></i>
-                        </label>
-                    </div>
+        <!-- App Header -->
+        <header class="mb-4">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm rounded mb-3">
+                <div class="logo-container">
+                    <a class="navbar-brand" href="#">
+                        <img src="images/Skeleton.png" alt="Notes App Logo" height="40" class="d-inline-block align-top">
+                        <span class="ml-2 font-weight-bold">Notes App</span>
+                    </a>
                 </div>
-
-                <div class="col-4 text-center" id="statusDiv">
-
-                </div>
-
-
-
-                <div class="col-4 p-1">
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-info ml-auto" type="button" id="shareBtn" data-toggle="modal" data-target="#shareModal">
-                            <i class="fas fa-share-alt"></i> Share
+                
+                <div class="d-flex align-items-center ml-auto">
+                    <!-- Home Button -->
+                    <button class="btn btn-outline-primary mr-2 shadow-sm" type="button" id="homeBtn" title="Back to Home">
+                        <i class="fas fa-home"></i> Home
+                    </button>
+                    
+                    <!-- View Mode Toggle -->
+                    <div class="btn-group btn-group-sm mr-3 border rounded shadow-sm" role="group" aria-label="View Mode">
+                        <button type="button" class="btn btn-light" data-toggle="tooltip" title="Light Mode" onclick="$('input:radio[name=mode][value=LIGHT]').click()">
+                            <i class="far fa-sun"></i>
+                        </button>
+                        <button type="button" class="btn btn-light" data-toggle="tooltip" title="Dark Mode" onclick="$('input:radio[name=mode][value=DARK]').click()">
+                            <i class="far fa-moon"></i>
                         </button>
                     </div>
-
+                    
+                    <!-- Hidden radio inputs for compatibility -->
+                    <div class="d-none">
+                        <input type="radio" name="mode" value="LIGHT">
+                        <input type="radio" name="mode" value="DARK">
+                    </div>
+                    
+                    <!-- Share Button -->
+                    <button class="btn btn-info mr-2 shadow-sm" type="button" id="shareBtn" data-toggle="modal" data-target="#shareModal">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                    
+                    <!-- User Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle shadow-sm" type="button" id="userMenuDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userMenuDropdown">
+                            <a class="dropdown-item" href="profile.php">
+                                <i class="fas fa-user-circle mr-2"></i>Profile
+                            </a>
+                            <a class="dropdown-item" href="preferences.php">
+                                <i class="fas fa-cog mr-2"></i>Preferences
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="Logout(); return false;">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </a>
+                        </div>
+                    </div>
                 </div>
+            </nav>
+            
+            <!-- Status bar -->
+            <div class="alert alert-info text-center mb-3 shadow-sm" id="statusDiv" role="status">
+                Ready to edit
             </div>
-        </div>
+        </header>
 
         <!-- Share Modal -->
         <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
@@ -118,40 +141,51 @@ if (!isset($_SESSION['username'])) {
             </div>
         </div>
 
-        <div class="border-bottom">
-            <div class="row mt-1 p-3 mode-target">
-                <h3>Labels</h3>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">#</span>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-3">
+                        <!-- Title input with better styling -->
+                        <input class="form-control-lg border-0 w-100 font-weight-bold mb-3" 
+                               type="text" id="title" placeholder="Note Title" />
+                        
+                        <!-- Note content textarea with improved styling -->
+                        <div class="form-group mb-0">
+                            <textarea class="form-control note-editor border-0" 
+                                     id="textareaElem" rows="15" 
+                                     placeholder="Start typing your note here..."></textarea>
+                        </div>
                     </div>
-                    <input id='txtLabel' type="text" class="form-control" placeholder="Label Name Here">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="AddLabelBtn">Add Label</button>
-                    </div>
-                </div>
-
-                <p class="d-block text-muted">To rename a label, enter the name you want to rename to and press edit icon below</p>
-
-                <div id='labelDiv' class='p-1 col-12'>
-
                 </div>
             </div>
-        </div>
-
-
-
-        <div class="row">
-            <div class="col-12 p-3">
-                <span class="d-flex justify-content-start">
-                    <input class="border-0 h2 form-control" type="text" id="title"
-                        value="" />
-
-                </span>
-
-                <hr />
-                <div class="form-group">
-                    <textarea class="form-control border-0" id='textareaElem' id="content" rows="13"></textarea>
+            
+            <div class="col-md-3">
+                <!-- Labels Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-tags mr-2"></i>Labels</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">#</span>
+                            </div>
+                            <input id="txtLabel" type="text" class="form-control" placeholder="Add a label">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" id="AddLabelBtn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <small class="d-block text-muted mb-3">
+                            To rename a label, enter the new name and click the edit icon.
+                        </small>
+                        
+                        <div id="labelDiv" class="d-flex flex-wrap">
+                            <!-- Labels will appear here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,6 +194,10 @@ if (!isset($_SESSION['username'])) {
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <!-- Offline Support -->
+    <script src="js/idb.js"></script>
+    <script src="js/offlineNotes.js"></script>
+    <!-- App Scripts -->
     <script src="js/edit.js" type="module"></script>
     <script src="js/logout.js"></script>
     <script src='js/labelActions.js'></script>
