@@ -15,10 +15,15 @@ const ASSETS_TO_CACHE = [
   '/js/generateList.js',
   '/js/generateGrid.js',
   '/js/utils.js',
-  '/js/idb.js', // We'll create this file
-  '/js/offlineNotes.js', // We'll create this file
+  '/js/idb.js',
+  '/js/offlineNotes.js',
   '/images/Skeleton.png',
   '/images/default_profile_pic.jpg',
+  '/images/icon-192.png',
+  '/images/icon-512.png',
+  '/images/maskable-icon.png',
+  '/offline.html',
+  '/offline-fallback.html',
   'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
   'https://code.jquery.com/jquery-3.7.1.min.js',
@@ -110,9 +115,16 @@ self.addEventListener('fetch', event => {
             })
             .catch(error => {
               console.log('Fetch failed', error);
-              // For HTML pages, return offline page
+              // For HTML pages, return appropriate offline page
               if (event.request.headers.get('accept').includes('text/html')) {
-                return caches.match('/offline.html');
+                // Use offline.html for the main page and offline-fallback.html for other pages
+                if (event.request.url.includes('/index.php') ||
+                    event.request.url.endsWith('/') ||
+                    event.request.url.endsWith('/index.html')) {
+                  return caches.match('/offline.html');
+                } else {
+                  return caches.match('/offline-fallback.html');
+                }
               }
               
               // Return graceful error for other resources

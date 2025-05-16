@@ -527,18 +527,18 @@ body.bg-dark {
 /* PWA install prompt */
 .pwa-install-prompt {
   position: fixed;
-  bottom: 1rem;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: white;
-  padding: 1rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow-lg);
-  z-index: 1050;
   display: flex;
   align-items: center;
-  max-width: 400px;
-  animation: slideUp 0.5s;
+  padding: 12px 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-width: 600px;
+  width: 90%;
 }
 
 .pwa-install-prompt .btn-close {
@@ -548,6 +548,44 @@ body.bg-dark {
 @keyframes slideUp {
   from { transform: translate(-50%, 100%); }
   to { transform: translate(-50%, 0); }
+}
+
+/* Offline status indicators */
+.online-status,
+.offline-status {
+  animation: fadeIn 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Offline note indicator */
+.note-offline-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  opacity: 0.7;
+}
+
+/* Apply font size to note content */
+.note-content,
+.card-text,
+.card-body textarea {
+  font-size: var(--note-font-size);
+}
+
+/* Custom note background */
+.note,
+.card {
+  background-color: var(--note-color);
 }
 
 /* Responsive Design System */

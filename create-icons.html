@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate PWA Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        .btn {
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>PWA Icon Generator</h1>
+    <p>This page will create the following icon files for your PWA:</p>
+    <ul>
+        <li>icon-192.png (192×192)</li>
+        <li>icon-512.png (512×512)</li>
+        <li>maskable-icon.png (512×512 with safe area for adaptive icons)</li>
+    </ul>
+
+    <div class="controls">
+        <label for="iconText">Icon Text:</label>
+        <input type="text" id="iconText" value="N" placeholder="Single letter for icon">
+        <button class="btn" onclick="generateIcons()">Generate Icons</button>
+    </div>
+
+    <div>
+        <h2>192×192 Icon</h2>
+        <canvas id="canvas192" width="192" height="192"></canvas>
+        <a id="download192" class="btn" download="icon-192.png">Download</a>
+    </div>
+
+    <div>
+        <h2>512×512 Icon</h2>
+        <canvas id="canvas512" width="512" height="512"></canvas>
+        <a id="download512" class="btn" download="icon-512.png">Download</a>
+    </div>
+
+    <div>
+        <h2>Maskable Icon (512×512)</h2>
+        <canvas id="canvasMaskable" width="512" height="512"></canvas>
+        <a id="downloadMaskable" class="btn" download="maskable-icon.png">Download</a>
+    </div>
+
+    <script>
+        function generateIcons() {
+            const iconText = document.getElementById('iconText').value || 'N';
+            
+            // Generate 192×192 icon
+            drawIcon('canvas192', 192, iconText, false);
+            prepareDownload('canvas192', 'download192');
+            
+            // Generate 512×512 icon
+            drawIcon('canvas512', 512, iconText, false);
+            prepareDownload('canvas512', 'download512');
+            
+            // Generate maskable icon
+            drawIcon('canvasMaskable', 512, iconText, true);
+            prepareDownload('canvasMaskable', 'downloadMaskable');
+        }
+        
+        function drawIcon(canvasId, size, text, isMaskable) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // If maskable, leave safe zone (10% padding)
+            const padding = isMaskable ? size * 0.1 : 0;
+            const usableSize = size - (padding * 2);
+            
+            // Draw background
+            if (isMaskable) {
+                // Fill entire canvas for maskable icon
+                ctx.fillStyle = '#007bff';
+                ctx.fillRect(0, 0, size, size);
+                
+                // Draw inner circle with padding
+                ctx.fillStyle = '#0056b3';
+                ctx.beginPath();
+                ctx.arc(size/2, size/2, usableSize/2, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                // Regular icon with gradient
+                const gradient = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+                gradient.addColorStop(0, '#007bff');
+                gradient.addColorStop(1, '#0056b3');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(size/2, size/2, size/2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Add text
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${usableSize * 0.6}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, size/2, size/2);
+        }
+        
+        function prepareDownload(canvasId, linkId) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.getElementById(linkId);
+            link.href = canvas.toDataURL('image/png');
+        }
+        
+        // Generate icons on page load
+        window.onload = generateIcons;
+    </script>
+</body>
+</html> 

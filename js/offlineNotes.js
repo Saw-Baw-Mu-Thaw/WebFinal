@@ -173,10 +173,11 @@ const OfflineNotesManager = (function() {
       
       console.log(`Found ${pendingActions.length} pending actions to sync`);
       
+      // Prepare notes for bulk sync
+      const notesToSync = [];
+      
       // Process each action in order
       for (const action of pendingActions) {
-        let success = false;
-        
         if (action.type === 'update') {
           // Get the note from IndexedDB
           const note = await idbHelper.get('notes', action.noteId);
@@ -186,10 +187,19 @@ const OfflineNotesManager = (function() {
             continue;
           }
           
-          // Update on server
-          success = await updateNoteOnServer(note);
+          notesToSync.push({
+            id: note.id,
+            action: 'update',
+            title: note.Title,
+            content: note.Content,
+            serverNoteId: note.serverNoteId || note.id
+          });
         } else if (action.type === 'delete') {
-          success = await deleteNoteOnServer(action.noteId);
+          notesToSync.push({
+            id: action.noteId,
+            action: 'delete',
+            serverNoteId: action.serverNoteId
+          });
         } else if (action.type === 'create') {
           const note = await idbHelper.get('notes', action.noteId);
           if (!note) {
@@ -198,24 +208,104 @@ const OfflineNotesManager = (function() {
             continue;
           }
           
-          success = await createNoteOnServer(note);
-        }
-        
-        if (success) {
-          await clearPendingAction(action.timestamp);
-        } else {
-          console.warn(`Failed to sync action: ${action.type} for note ${action.noteId}`);
+          notesToSync.push({
+            id: note.id,
+            action: 'create',
+            title: note.Title,
+            content: note.Content
+          });
         }
       }
       
-      console.log('Sync completed successfully');
-      
-      // Refresh the notes list after sync
-      if (window.location.pathname.includes('index.php')) {
-        location.reload();
+      // Send bulk update to server
+      if (notesToSync.length > 0) {
+        try {
+          const response = await fetch('api/sync_notes.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              notes: notesToSync
+            })
+          });
+          
+          const result = await response.json();
+          
+          if (result.code === 0) {
+            console.log('Sync completed successfully', result);
+            
+            // Process results
+            for (const noteResult of result.results) {
+              if (noteResult.success) {
+                // For created notes, update the local note with the new server ID
+                if (noteResult.serverNoteId) {
+                  const note = await idbHelper.get('notes', noteResult.id);
+                  if (note) {
+                    note.id = parseInt(noteResult.serverNoteId);
+                    note.syncStatus = 'synced';
+                    await idbHelper.put('notes', note);
+                    // Also delete the old temporary record
+                    if (noteResult.id < 0) {
+                      await idbHelper.delete('notes', noteResult.id);
+                    }
+                  }
+                }
+                
+                // Find the corresponding action and clear it
+                const action = pendingActions.find(a => a.noteId == noteResult.id);
+                if (action) {
+                  await clearPendingAction(action.timestamp);
+                }
+              }
+            }
+            
+            // Refresh the notes list after sync if on the index page
+            if (window.location.pathname.includes('index.php')) {
+              // Show a brief sync success message
+              const statusEl = document.createElement('div');
+              statusEl.className = 'alert alert-success position-fixed';
+              statusEl.style.bottom = '10px';
+              statusEl.style.right = '10px';
+              statusEl.style.zIndex = '1000';
+              statusEl.textContent = 'Notes synchronized successfully';
+              document.body.appendChild(statusEl);
+              
+              setTimeout(() => {
+                statusEl.style.opacity = '0';
+                statusEl.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => statusEl.remove(), 500);
+              }, 2000);
+              
+              // Refresh the notes
+              $.ajax({
+                url: "api/get_notes.php",
+                type: "GET",
+                datatype: "json",
+              }).done(function (response) {
+                saveNotesToIndexedDB(response);
+                // Redraw UI based on current layout
+                const layout = localStorage.getItem('Layout') || 'GRID';
+                if (layout === 'GRID') {
+                  $('.notes-container').empty();
+                  for (var i = 0; i < response.length; i++) {
+                    generateGrid(response[i]);
+                  }
+                } else {
+                  $('.notes-container').empty();
+                  generateList(response);
+                }
+              });
+            }
+          } else {
+            console.error('Sync error:', result.message);
+          }
+        } catch (error) {
+          console.error('Error during sync request:', error);
+        }
       }
     } catch (error) {
-      console.error('Error during sync:', error);
+      console.error('Error during sync process:', error);
     } finally {
       syncInProgress = false;
     }
