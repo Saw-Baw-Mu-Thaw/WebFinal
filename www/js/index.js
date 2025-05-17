@@ -13,14 +13,14 @@ function getNotesGrid() {
     type: "GET",
     datatype: "json",
   }).done(function (response) {
-    // console.log(response);
+
     localStorage.setItem('notes', JSON.stringify(response))
     // Save to IndexedDB for offline use
     if (window.OfflineNotesManager) {
       OfflineNotesManager.saveNotesToIndexedDB(response);
     }
     for (var i = 0; i < response.length; i++) {
-      // console.log(response[i]);
+
       generateGrid(response[i]);
     }
   }).fail(function(error) {
@@ -48,7 +48,7 @@ function getNotesList() {
     type: "GET",
     datatype: "json",
   }).done(function (response) {
-    // console.log(response);
+ 
     localStorage.setItem('notes', JSON.stringify(response))
     // Save to IndexedDB for offline use
     if (window.OfflineNotesManager) {
@@ -78,7 +78,7 @@ function setPreferences(elemList) {
     type: "GET",
     datatype: "json",
   }).done(function (response) {
-    // console.log(response);
+
     localStorage.setItem('Layout', response['Layout'])
     localStorage.setItem('Mode', response['Mode'])
     
@@ -96,7 +96,7 @@ function setPreferences(elemList) {
     document.documentElement.style.setProperty('--note-color', noteColor);
     
     if (response["code"] == 0) {
-      // console.log("setting preferences");
+
 
       // choose list or grid here
       if (response["Layout"] == "GRID") {

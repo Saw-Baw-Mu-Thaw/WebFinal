@@ -1,16 +1,10 @@
 function imgDropHandler(e) {
     e.preventDefault()
     var noteId = $(e.target).data('id')
-    // console.log($(e.target))
-    // console.log('Attach Image to Note', noteId)
-    // console.log(e)
     if (e.originalEvent.dataTransfer) {
-        console.log('original Event')
-        console.log(e.originalEvent.dataTransfer.items)
         var item = [...e.originalEvent.dataTransfer.items][0]
         if (item.kind === 'file') {
             const file = item.getAsFile();
-            console.log(`file name : ${file.name}}`)
             changeImg(file.name, file, noteId);
         }
     }
@@ -19,8 +13,6 @@ function imgDropHandler(e) {
 
 function imgDragOverHandler(e) {
     var noteId = $(e.target).data('id')
-    console.log($(e.target))
-    console.log('File is above Note\'s ', noteId, 'drop zone')
     e.preventDefault()
 }
 
@@ -35,7 +27,6 @@ function imgDragLeave(e) {
 }
 
 function changeImg(filename, file, noteId) {
-    console.log(filename, file, noteId);
     var fd = new FormData();
     fd.append("file", file)
     fd.append("filename", filename)
@@ -50,7 +41,6 @@ function changeImg(filename, file, noteId) {
         contentType: false
     }).done((response) => {
         if (response['code'] == 0) {
-            console.log('success')
             location.reload();
         } else {
             showError(response['message'])

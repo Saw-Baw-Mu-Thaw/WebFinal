@@ -11,7 +11,6 @@ function changeMode(e) {
         type: 'GET',
         datatype: 'json'
     }).done(function (response) {
-        // console.log(response)
         window.clearInterval(interval)
         interval = null
 
@@ -47,7 +46,6 @@ function sendModeUpdate(mode) {
         type: 'GET',
         datatype: 'json'
     }).done(function (response) {
-        // console.log(response)
 
         window.clearInterval(interval)
         interval = null

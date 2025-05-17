@@ -11,7 +11,7 @@ function findLabels(e) {
         if (layout === "GRID") {
             $('#mainContent').empty()
             for (var i = 0; i < notes.length; i++) {
-                // console.log(response[i]);
+               
                 generateGrid(notes[i]);
             }
         } else {

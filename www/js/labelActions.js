@@ -18,7 +18,6 @@ function addLabel() {
 function deleteLabel(e) {
     var labelId = $(e.target).data('id');
 
-    // console.log('Delete label', labelId);
     // send delete ajax
     $.ajax({
         url: 'api/delete_label.php?id=' + labelId,

@@ -1,5 +1,4 @@
 function addPin(noteId) {
-    console.log("Pinning Note");
     $.ajax({
         url: 'api/add_pin.php?id=' + noteId,
         type: "GET",
@@ -14,7 +13,6 @@ function addPin(noteId) {
 }
 
 function removePin(noteId) {
-    console.log("Unpinning Note");
     $.ajax({
         url: "api/remove_pin.php?id=" + noteId,
         type: "GET",

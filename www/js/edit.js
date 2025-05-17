@@ -15,7 +15,7 @@ var currentUsername = "";
 var isCollaborationEnabled = false;
 
 $(document).ready(function () {
-    // console.log('running')
+
     setPreferences();
 
     $('#title').on('input', saveContent);
@@ -75,10 +75,7 @@ function getNoteContents() {
         datatype: "json"
     }).done(function (response) {
         if (response['code'] == 0) {
-            // console.log(response['title'])
-            // console.log(response['contents'])
-            // console.log(response['action']);
-            // console.log(response['role'])
+            
             document.title = "Edit Page";
             $('#title').val(response['title']);
             $('#textareaElem').val(response['contents']);
@@ -111,7 +108,7 @@ function getNoteContents() {
                 }
             });
 
-            // console.log(response['labels'])
+            
             // showing the labels
             var labels = response['labels']
             for (var i = 0; i < labels.length; i++) {
@@ -133,7 +130,7 @@ function getNoteContents() {
     }).fail(function () {
         alert("Could not connect to server")
     }).always(() => {
-        //console.log('executing always')
+        
     })
 }
 
@@ -155,15 +152,13 @@ function initializeCollaboration() {
 }
 
 function saveContent() {
-    // console.log("Saving")
-    // console.log("timeout : ", timeout)
+    
     if (timeout != null) {
-        // console.log('cleared timeout')
         window.clearTimeout(timeout);
     }
 
     noteChanged = true;
-    // console.log('noteChanged :', noteChanged);
+   
     var newTitle = $('#title').val();
     var contents = $('#textareaElem').val();
     localTitle = $('#title').val();
@@ -184,7 +179,6 @@ function sendContent(OldTitle, NewTitle, Contents) {
         return;
     }
 
-    // console.log("Sending")
     $.ajax({
         url: "api/update_note.php",
         type: "POST",
@@ -196,7 +190,7 @@ function sendContent(OldTitle, NewTitle, Contents) {
             showSaved();
             noteChanged = false;
             oldTitle = $('#title').val()
-            // console.log(noteChanged);
+           
 
             // stops the fail retry
             intervalStarted = false
@@ -234,7 +228,6 @@ function sendContent(OldTitle, NewTitle, Contents) {
             // try saving every one minute
             if (intervalStarted == false) {
                 failInterval = window.setInterval(function () {
-                    // console.log('trying again')
                     sendContent(oldTitle, localTitle, localContents)
                 }, 10000)
                 intervalStarted = true
@@ -277,7 +270,7 @@ function setPreferences() {
         type: "GET",
         datatype: "json"
     }).done(function (response) {
-        console.log(response)
+        
         if (response['code'] == 0) {
             // Apply theme
             const isDarkMode = response['Mode'] == 'DARK';

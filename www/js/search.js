@@ -1,7 +1,6 @@
 var timeout = null;
 
 function searchNote(e) {
-    // console.log($(e.target).val())
 
     if (timeout != null) {
         window.clearTimeout(timeout);
@@ -17,7 +16,6 @@ function searchNote(e) {
 }
 
 function sendSearch(searchTxt) {
-    console.log('Sending ', searchTxt)
 
     // clear list group
     $('#searchList').empty()
@@ -30,7 +28,6 @@ function sendSearch(searchTxt) {
     }).done((response) => {
         if (response['code'] == 0) {
             var searches = response['searches']
-            console.log(searches)
             for (var i = 0; i < searches.length; i++) {
                 var search = searches[i]
                 var listButton = $("<button onclick='openNote(" + search['noteId'] + "," + search['locked'] + ")'></button>")

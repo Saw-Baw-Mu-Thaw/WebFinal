@@ -201,7 +201,6 @@ function savePreferences() {
         data: preferences,
         dataType: 'json',
         success: function(response) {
-            console.log('Response:', response);
             if (response.code === 0 || response.code == 0) {
                 alert('Preferences saved successfully!');
             } else {
