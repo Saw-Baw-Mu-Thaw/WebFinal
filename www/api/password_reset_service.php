@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["request_reset"])) {
     if (empty($user_email) || !filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
         $message = '<label class="text-danger">Please enter a valid email.</label>';
     } else {
-        // Check if email exists in database
+        // Check  email  in database
         $stmt = $connect->prepare("SELECT UserID, Username FROM users WHERE Email = ?");
         $stmt->bind_param("s", $user_email);
         $stmt->execute();
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["request_reset"])) {
             $user_id = $user['UserID'];
             $user_name = $user['Username'];
 
-            // Generate OTP and expiration
+            // Generate OTP with expired date
             $otp_code = random_int(100000, 999999);
             $expires_at = date("Y-m-d H:i:s", strtotime("+24 hours"));
             $type = 'password_reset';
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["request_reset"])) {
                 $message = '<label class="text-danger">Failed to generate reset code. Please try again.</label>';
             }
         } else {
-            $message = '<label class="text-success">If your email is registered with us, you will receive password reset instructions shortly.</label>';
+            $message = '<label class="text-success">If your email is registered , you will receive password reset message in email.</label>';
         }
     }
 }

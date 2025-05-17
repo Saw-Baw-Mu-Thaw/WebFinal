@@ -67,21 +67,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["register"])) {
                 $stmt->bind_param("i", $user_id);
                 $stmt->execute();
 
-                // Generate OTP and expiration
+                // Generate OTP 
                 $otp_code = random_int(100000, 999999);
                 $expires_at = date("Y-m-d H:i:s", strtotime("+24 hours"));
                 $type = 'activation';
 
-                // Insert OTP into table
+                // Insert OTP table
                 $stmt = $connect->prepare("INSERT INTO otp (UserID, Code, Type, ExpiresAt) VALUES (?, ?, ?, ?)");
                 $stmt->bind_param("iiss", $user_id, $otp_code, $type, $expires_at);
                 $stmt->execute();
 
-                // Auto login the user
+                // user auto login 
                 $_SESSION["userId"] = $user_id;
                 $_SESSION['username'] = $user_name;
 
-                // Generate activation link
+                // create activation link
                 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
                 $host = $_SERVER['HTTP_HOST'];
                 $script_dir = dirname($_SERVER['SCRIPT_NAME']);
@@ -91,28 +91,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["register"])) {
                 $mail = new PHPMailer(true);
                 try {
                     $mail->isSMTP();
-                    $mail->Host = 'smtp.gmail.com';
+                    $mail->Host = 'smtp.gmail.com'; //SMTP server for gmail
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'webfinal2005@gmail.com';
-                    $mail->Password = 'dctg hyjz dvas kkmn';
+                    $mail->Username = 'webfinal2005@gmail.com'; // email for testing that hold SMTP server
+                    $mail->Password = 'dctg hyjz dvas kkmn'; // App password for testing
                     $mail->SMTPSecure = 'tls';
                     $mail->Port = 587;
 
-                    $mail->setFrom('webfinal2005@gmail.com', 'Note Taking Website');
+                    $mail->setFrom('webfinal2005@gmail.com', 'Note Taking App');
                     $mail->addAddress($user_email);
                     $mail->isHTML(true);
-                    $mail->Subject = 'Email Verification - Note Taking Website';
+                    $mail->Subject = 'Email Verification - Note Taking App';
                     $mail->Body = "
                                  <p>Thank you for registering!</p>
                                  <p>Your OTP code is: <strong>$otp_code</strong></p>
                                  <p>Please click the link below to enter your OTP and verify your email:</p>
                                  <a href='$activation_link'>Verify Email Here</a>
-                                 <p>This code will expire in 15 minutes.</p>
+                                 <p>This code will expire soon.</p>
                                 ";
 
                     $mail->send();
 
-                    // Redirect to home or dashboard
+                    // redirect to index.php
                     header("Location: index.php?uid=$user_id");
                     exit();
                 } catch (Exception $e) {

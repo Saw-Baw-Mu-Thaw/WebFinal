@@ -8,14 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $otp = $_POST['otp'] ?? null;
 
     if (!$userId || !$otp) {
-        //echo "<script>console.log('Session userId: " . ($_SESSION['userId'] ?? 'Not Set') . "');</script>";
 
         if (isset($_POST['otp'])) {
             echo "<script>console.log('OTP from form: " . htmlspecialchars($_POST['otp']) . "');</script>";
         } else {
             echo "<script>console.log('OTP from form: Not Set');</script>";
         }
-        echo "Missing required fields.";
+
         exit();
     }
 

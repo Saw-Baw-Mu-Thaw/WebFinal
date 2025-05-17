@@ -151,8 +151,8 @@ CREATE TABLE `preferences` (
 --
 
 INSERT INTO `preferences` (`UserID`, `FontSize`, `NoteColor`, `Mode`, `Layout`) VALUES
-(1, 14, '#ffffff', 'LIGHT', 'LIST'),
-(2, 14, '#ffffff', 'DARK', 'GRID');
+(1, 14, '#ffffff', 'LIGHT', 'GRID'),
+(2, 14, '#ffffff', 'LIGHT', 'GRID');
 
 -- --------------------------------------------------------
 
