@@ -80,7 +80,7 @@ function generateList(response) {
         // Add conditional buttons
         if (!obj['SharedNote']) {
             // Delete button
-            var delBtn = $(`<button class='btn btn-danger' title='Delete Note' onclick='deleteNote(${obj['NoteID']}, "${obj['Title']}")'><i class="fas fa-trash"></i></button>`);
+            var delBtn = $(`<button class='btn btn-danger' title='Delete Note' onclick='deleteNote(${obj['NoteID']}, "${obj['Title']}", ${obj['Locked']})'><i class="fas fa-trash"></i></button>`);
             $(btnGroup).append(delBtn);
             
             // Pin/Unpin button

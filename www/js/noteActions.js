@@ -68,19 +68,58 @@ function sendPwd(e) {
     })
 }
 
-function deleteNote(noteId, title) {
+function deleteNote(noteId, title, locked) {
     $("#errorDiv").hide();
 
-    $(".modal-title").text("Delete " + title + "?");
-    $("#delConfirmBtn").data("noteId", noteId)
-    $('#delConfirmBtn').data("title", title)
-    $("#delConfirmBtn").on('click', sendDelete);
-    $("#deleteModal").modal('show');
+    if (locked) {
+        // For locked notes, first verify password
+        $(".modal-title").text("Enter password to delete " + title);
+        $("#pwdSubmitBtn").data('id', noteId);
+        $("#pwdSubmitBtn").data('title', title);
+        $("#pwdSubmitBtn").off('click').on('click', verifyPasswordForDelete);
+        $("#passwordModal").modal('show');
+    } else {
+        // For regular notes, proceed with normal deletion flow
+        $(".modal-title").text("Delete " + title + "?");
+        $("#delConfirmBtn").data("noteId", noteId);
+        $('#delConfirmBtn').data("title", title);
+        $("#delConfirmBtn").off('click').on('click', sendDelete);
+        $("#deleteModal").modal('show');
+    }
+}
+
+function verifyPasswordForDelete(e) {
+    var noteId = $(e.target).data('id');
+    var title = $(e.target).data('title');
+    var password = $('#notePwd').val();
+
+    // Verify password before deletion
+    $.ajax({
+        url: 'api/open_locked_note.php',
+        type: "POST",
+        datatype: "json",
+        contenttype: 'application/json',
+        data: JSON.stringify({ id: noteId, password: password })
+    }).done(function (response) {
+        if (response['code'] == 0) {
+            // Password verified, close password modal
+            $("#passwordModal").modal('hide');
+            $('#notePwd').val(''); // Clear password field
+            
+            // Now show the delete confirmation dialog
+            $(".modal-title").text("Delete " + title + "?");
+            $("#delConfirmBtn").data("noteId", noteId);
+            $('#delConfirmBtn').data("title", title);
+            $("#delConfirmBtn").off('click').on('click', sendDelete);
+            $("#deleteModal").modal('show');
+        } else {
+            showError(response['message']);
+        }
+    });
 }
 
 function sendDelete(e) {
     // send ajax to delete note
-
     var noteId = $(e.target).data("noteId")
     var title = $(e.target).data("title")
 
