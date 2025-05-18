@@ -258,17 +258,13 @@ if (isset($_GET['uid'])) {
                 </button>
             </form>
 
-            <a href="#" class="resend-link" id="resendOtp">
-                <i class="fas fa-redo-alt mr-1"></i> Didn't receive the code? Resend
-            </a>
-
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Check if dark mode is active in localStorage and apply it
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const mode = localStorage.getItem('mode');
             if (mode === 'DARK') {
                 document.body.classList.add('bg-dark');
@@ -277,21 +273,15 @@ if (isset($_GET['uid'])) {
             // Add OTP input enhancements
             const otpInput = document.getElementById('otp');
             if (otpInput) {
-                
+
                 // Auto-focus the OTP input
                 otpInput.focus();
 
                 // Only allow numbers
-                otpInput.addEventListener('input', function (e) {
+                otpInput.addEventListener('input', function(e) {
                     this.value = this.value.replace(/[^0-9]/g, '');
                 });
             }
-
-            // Resend OTP functionality (placeholder)
-            document.getElementById('resendOtp').addEventListener('click', function (e) {
-                e.preventDefault();
-                alert('A new verification code has been sent to your email.');
-            });
         });
     </script>
 </body>
